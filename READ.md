@@ -1,6 +1,26 @@
 # VR File Generator
 
-This file generator generates files for the VR experiment based on user requirements. 
+This file generator generates files for the VR experiment based on user requirements. There are two kinds of files you can generate: VR configuration file and trial file.
+
+#### Generate VR configuration files
+Click on the "Generate configuration" button on the home page, and you will see the configuration file form:
+
+<img src="/images/configuration_file_builder.png" alt="Config builder" width="70%" />
+
+#### Generate trial files
+Click on the "Generate trial" button on the home page to access the menu page of trial file genertor.
+
+A trial file consists of multiple scenes, so scenes need to be created before trial files are generated.
+To create a scene, click on the "Create scene" button and complete the forms.
+
+<img src="/images/scene_builder_1.png" alt="Scene builder 1" width="70%" />
+<img src="/images/scene_builder_2.png" alt="Scene builder 1" width="70%" />
+
+After creating scenes, click on the "Generate trial" button, where you will see all scenes avaliable in the database.
+
+<img src="/images/trial_builder.png" alt="Trial builder" width="70%" />
+
+Note that you must enter "Repeated times", which is the number of times each selected scene is repeated in the trial. Scenes are randomized in the generated trial file.
 
 ## Understanding JSON
 
@@ -35,7 +55,7 @@ In JSON, values must be one of the following data types:
 
 
 ## Customize forms
-This app allows users customize forms (configuratoin file form and object form) with JSON files. The file should be a JSON array containing form entry definitions. Each definition configures an entry in the form.
+This app allows users customize two forms with JSON files: configuratoin file form (in configuration file builder) and object form (in scene builder). The file should be a JSON array containing form entry definitions. Each definition configures an entry in the form.
 
 Note: Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output JSON file look like? You should be able to hand write the output JSON files.
 

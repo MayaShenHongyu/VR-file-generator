@@ -1,12 +1,6 @@
 const db = window.require("electron").remote.require("./electron").formConfig;
 initDatabase();
 
-setTimeout(() => {
-    db.find({}, (_err, docs) => {
-        console.log(docs);
-    });
-}, 2000);
-
 const CONFIG_ID = "config_form";
 const SCENE_ID = "scene_form";
 const OBJECT_ID = "object_form";
@@ -239,15 +233,11 @@ const insert = () => {
 };
 
 export function initDatabase() {
-    console.log("init");
-    // db.remove({}, { multi: true }, function (err, numRemoved) {
-    //     insert()
-    // });
-
     db.count({}, (_err, count) => {
-        console.log("count");
-        if (count === 0) {
-            insert();
+        if (count !== 4) {
+            db.remove({}, { multi: true }, (_err, _numRemoved) => {
+                insert();
+            });
         }
     });
 }

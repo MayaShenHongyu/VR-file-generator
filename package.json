@@ -2,11 +2,12 @@
     "name": "config-gen",
     "version": "0.1.0",
     "private": true,
-    "description": "Configuraton generator",
+    "description": "VR file generator",
     "author": "Maya Shen",
     "main": "electron.js",
     "build": {
-        "appId": "something.something"
+        "appId": "something.something",
+        "extends": null
     },
     "homepage": "./",
     "dependencies": {

@@ -32,18 +32,13 @@ export const storeScenes = (scenes) => {
 };
 
 function initDatabase() {
-    // console.log("init")
-    // db.remove({}, { multi: true }, function (err, numRemoved) {
-    //     db.insert({
-    //         database_id: SCENES_ID,
-    //         scenes: []
-    //     });
-    // });
     db.count({}, (_err, count) => {
-        if (count === 0) {
-            db.insert({
-                database_id: SCENES_ID,
-                scenes: [],
+        if (count !== 1) {
+            db.remove({}, { multi: true }, (_err, _numRemoved) => {
+                db.insert({
+                    database_id: SCENES_ID,
+                    scenes: []
+                });
             });
         }
     });

@@ -183,7 +183,7 @@ const CreateScenePage = () => {
             {backButton}
             <Header
                 title="Scene builder"
-                description="Enter the experiment parameters to create a basic configuration file that is formatted for use with the VR Simulator. The experimenter will change certain parameters in this file between experiments."
+                description={isOnEditObjectPage ? "Please finish creating the objects." : "Enter some basic information about this scene."}
             />
             {isOnEditObjectPage
                 ? renderEditObjectPage()

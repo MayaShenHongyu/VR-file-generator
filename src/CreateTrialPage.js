@@ -198,8 +198,8 @@ const CreateTrialPage = () => {
                 Back
             </Link>
             <Header
-                title="Scene builder"
-                description="Enter the experiment parameters to create a basic configuration file that is formatted for use with the VR Simulator. The experimenter will change certain parameters in this file between experiments."
+                title="Trial file builder"
+                description="Select the desired scenes to be included in the trial file."
             />
             <div className="content">
                 <div className="boxes-wrapper">
