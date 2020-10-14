@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>READ.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="vr-file-generator">VR File Generator</h1>
+<p>VR File Generator generates ...</p>
+<h2 id="understanding-json">Understanding JSON</h2>
+<p>JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. This file generator generate JSON files that configure VR experiments, and you can also customize the different forms with JSON files.</p>
+<p>In JSON, values must be one of the following data types:</p>
+<ul>
+<li>a string: sequence of characters in double quotes
+<ul>
+<li>e.g. <code>&quot;this is a string&quot;</code></li>
+</ul>
+</li>
+<li>a number: integer or decimal
+<ul>
+<li>e.g. <code>2</code>, <code>1.5</code></li>
+</ul>
+</li>
+<li>a boolean
+<ul>
+<li><code>true</code> or <code>false</code></li>
+</ul>
+</li>
+<li>an array: a list of JSON values in square brackets, separated by commas
+<ul>
+<li>e.g. <code>[&quot;string value&quot;, 2.3, true, { &quot;key&quot;: &quot;value&quot; }]</code></li>
+</ul>
+</li>
+<li>an object: a collection of key-value pairs in curly brackets, separated by commas
+<ul>
+<li>Keys must be strings. Note that an object cannot contain two identical keys.</li>
+<li>Values can be any JSON value: string, number, boolean, array, object</li>
+<li>e.g.</li>
+</ul>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"key_for_string":</span> <span class="hljs-string">"string value"</span><span class="hljs-string">,</span> 
+    <span class="hljs-attr">"key_for_number":</span> <span class="hljs-number">3</span><span class="hljs-string">,</span> 
+    <span class="hljs-attr">"key_for_array":</span> <span class="hljs-string">[1,</span> <span class="hljs-number">2</span><span class="hljs-string">],</span> 
+    <span class="hljs-attr">"key_for_object":</span> <span class="hljs-string">{</span>
+        <span class="hljs-attr">"key":</span> <span class="hljs-string">"string value"</span><span class="hljs-string">,</span>
+        <span class="hljs-attr">"key2":</span> <span class="hljs-number">3.5</span>
+    <span class="hljs-string">}</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+</li>
+</ul>
+<h2 id="customize-forms">Customize forms</h2>
+<p>This app allows users customize forms (configuratoin file form and object form) with JSON files. The file should be a JSON array containing form entry definitions. Each definition configures an entry in the form.</p>
+<p>Note: Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output JSON file look like? You should be able to hand write the output JSON files.</p>
+<h4 id="form-entry-definition">Form entry definition</h4>
+<p>Form entry definitions are JSON objects. For each definition, three key-value pairs are required:</p>
+<ul>
+<li><code>&quot;label&quot;</code>: This is the label for this entry at display. The value must be a string. Note that this does not affect the output of this entry in the resulting JSON file.</li>
+<li><code>&quot;key&quot;</code>: This is the key for this entry in the resulting JSON file. The value must be a string.</li>
+<li><code>&quot;type&quot;</code>: This refers to the input type of this entry. This file generator supports five different types: <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>, <code>&quot;switch&quot;</code> (true or false), <code>&quot;selection&quot;</code> (a dropdown menu), <code>&quot;list&quot;</code> (a list of texts or numbers).</li>
+<li>Depending on the input type, different key-value pairs are required, which is discussed in detials below. *(Optional) means that the key-value pair is optional.</li>
+</ul>
+<p>For example:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"key":</span> <span class="hljs-string">"subjNum"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"label":</span> <span class="hljs-string">"Subject Number"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"type":</span> <span class="hljs-string">"number"</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<p>This definition produces:</p>
+<img src="/images/label.png" alt="Label" height=60/>
+<p>And if I type in <code>8</code>, the output file will look like this:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"subjNum":</span> <span class="hljs-number">8</span><span class="hljs-string">,</span>
+    <span class="hljs-string">...,</span> <span class="hljs-string">//</span> <span class="hljs-string">other</span> <span class="hljs-string">entries</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<h3 id="types">Types</h3>
+<h5 id="%22text%22"><code>&quot;text&quot;</code></h5>
+<ul>
+<li>(Optional) <code>&quot;defaultValue&quot;</code>: Default value for this entry. This must be a string.</li>
+<li>(Optional) <code>&quot;addonAfter&quot;</code>: An add-on at the end of the input. This must be a String. The output of this entry is the concatenation of user input and the <code>&quot;addonAfter&quot;</code> value.</li>
+</ul>
+<p>For example:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"key":</span> <span class="hljs-string">"trialFile"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"label":</span> <span class="hljs-string">"Trial file"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"type":</span> <span class="hljs-string">"text"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"defaultValue":</span> <span class="hljs-string">"config"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"addonAfter":</span> <span class="hljs-string">".json"</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<img src="/images/text.png" alt="Text" height=60/>
+<p>In the output:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"trialFile":</span> <span class="hljs-string">"config.json"</span><span class="hljs-string">,</span>
+    <span class="hljs-string">...</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<br />
+<h5 id="%22number%22"><code>&quot;number&quot;</code></h5>
+<ul>
+<li>(Optional) <code>&quot;defaultValue&quot;</code>: Default value for this entry. This must be a number.</li>
+</ul>
+<p>For example:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"key":</span> <span class="hljs-string">"subjNum"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"label":</span> <span class="hljs-string">"Subject Number"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"type":</span> <span class="hljs-string">"number"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"defaultValue":</span> <span class="hljs-number">8</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<img src="/images/number.png" alt="Number" height=60/>
+<p>In the output:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"subjNum":</span> <span class="hljs-number">8</span><span class="hljs-string">,</span>
+    <span class="hljs-string">...</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<br />
+<h5 id="%22switch%22"><code>&quot;switch&quot;</code></h5>
+<ul>
+<li>(Optional) <code>&quot;defaultValue&quot;</code>: Default value for this entry. This must be a boolean, so either <code>true</code> or <code>false</code>.</li>
+</ul>
+<p>For example:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"key":</span> <span class="hljs-string">"collectConfidence"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"label":</span> <span class="hljs-string">"Collect Condifence Rating"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"type":</span> <span class="hljs-string">"switch"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"defaultValue":</span> <span class="hljs-literal">false</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<img src="/images/switch.png" alt="Switch" height=60/>
+<p>In the output:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"collectConfidence":</span> <span class="hljs-literal">false</span><span class="hljs-string">,</span>
+    <span class="hljs-string">...,</span> <span class="hljs-string">//</span> <span class="hljs-string">other</span> <span class="hljs-string">entries</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<br />
+<h5 id="%22select%22"><code>&quot;select&quot;</code></h5>
+<ul>
+<li><code>&quot;options&quot;</code>: Defines the options in the dropdown menu. This must be an object (collection of key/value pairs). The keys are values that appear in the output JSON file, and the values are the keys' labels for display. For instance: <code>{ &quot;male&quot;: &quot;Male&quot;, &quot;female&quot;: &quot;Female&quot;}</code>.</li>
+<li>(Optional) <code>&quot;defaultValue&quot;</code>: Default value for this entry. This must be one of the keys in <code>&quot;options&quot;</code>. For instance: <code>&quot;male&quot;</code>.</li>
+</ul>
+<p>For example:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"key":</span> <span class="hljs-string">"subjSex"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"label":</span> <span class="hljs-string">"Subject Sex"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"type":</span> <span class="hljs-string">"select"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"defaultValue":</span> <span class="hljs-string">"male"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"options":</span> <span class="hljs-string">{</span>
+        <span class="hljs-attr">"male":</span> <span class="hljs-string">"Male"</span><span class="hljs-string">,</span>
+        <span class="hljs-attr">"female":</span> <span class="hljs-string">"Female"</span><span class="hljs-string">,</span>
+        <span class="hljs-attr">"non_binary":</span> <span class="hljs-string">"Non binary"</span>
+    <span class="hljs-string">}</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<p><img src="/images/select.png" alt="Select"
+height=170 /></p>
+<p>In the output:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"subjSex":</span> <span class="hljs-string">"male"</span><span class="hljs-string">,</span>
+    <span class="hljs-string">...</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<br />
+<h5 id="%22list%22"><code>&quot;list&quot;</code></h5>
+<ul>
+<li><code>&quot;itemType&quot;</code>: The type of elements in list. Either <code>&quot;number&quot;</code> or <code>&quot;text&quot;</code>.</li>
+<li><code>&quot;listSize&quot;</code>: The number of elements in list. Should be smaller than 5.</li>
+<li>(Optional) <code>&quot;defaultValue&quot;</code>: Default value for this entry. This must be a list containing <code>&quot;listSize&quot;</code> elements of type <code>&quot;itemType&quot;</code>. If <code>&quot;listSize&quot;</code> is <code>2</code> and <code>&quot;itemType&quot;</code> is <code>&quot;text&quot;</code>, then <code>&quot;defaultValue&quot;</code> could be <code>[&quot;value1&quot;, &quot;value2]</code>.</li>
+</ul>
+<p>For example:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"key":</span> <span class="hljs-string">"coordinates"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"label":</span> <span class="hljs-string">"Coordinates (X, Y, Z)"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"type":</span> <span class="hljs-string">"list"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"itemType":</span> <span class="hljs-string">"number"</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"listSize":</span> <span class="hljs-number">3</span><span class="hljs-string">,</span>
+    <span class="hljs-attr">"defaultValue":</span> <span class="hljs-string">[</span>
+        <span class="hljs-number">1</span><span class="hljs-string">,</span>
+        <span class="hljs-number">2</span><span class="hljs-string">,</span>
+        <span class="hljs-number">3</span>
+    <span class="hljs-string">]</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<img src="/images/list.png" alt="List" height=60 />
+<p>In the output:</p>
+<pre class="hljs"><code><div><span class="hljs-string">{</span>
+    <span class="hljs-attr">"coordinatrs":</span> <span class="hljs-string">[1,</span> <span class="hljs-number">2</span><span class="hljs-string">,</span> <span class="hljs-number">3</span><span class="hljs-string">],</span>
+    <span class="hljs-string">...</span>
+<span class="hljs-string">}</span>
+</div></code></pre>
+<h3 id="import-form-setting">Import form setting</h3>
+<p>When you have a JSON file that conforms to the rules above, you can import this setting by navigating to the 'Form Settings' page by clicking on the 'Import form settings' button on the home page.</p>
+<img src="/images/import.png" alt="Import"  width="70%" />
+<p>The app will parse the imported file and report debugging errors, if there are any.</p>
+<img src="/images/import_error.png" alt="Import"  width="70%" />
+<p>If the imported file contains no error, you can click on the 'Save settings' button and save the settings.</p>
+<img src="/images/parse_successful.png" alt="Import" width="70%" />
+<p>The change will be reflected in the form:
+<img src="/images/changed_form.png" alt="Import" width="70%" /></p>
+
+</body>
+</html>

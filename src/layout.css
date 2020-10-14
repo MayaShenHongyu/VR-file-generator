@@ -1,0 +1,57 @@
+:root {
+    --dark-gray: #394b59;
+    --gray-1: #5c7080;
+    --gray-3: #8a9ba8;
+    --light-gray: #d8e1e8;
+}
+
+.layout-outer {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.layout-inner {
+    overflow: scroll;
+    padding-bottom: 5vh;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 60px 80px 40px;
+    text-align: center;
+}
+
+.header h2 {
+    color: var(--gray-1);
+    margin-bottom: 0.1rem;
+}
+
+.header p {
+    color: var(--gray-3);
+}
+
+.back-button {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 15px 20px;
+    padding: 5px 10px;
+}
+
+.center {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.medium-margin {
+    margin: 5vh 0;
+}
+
+.small-margin {
+    margin: 2vh 0;
+}
