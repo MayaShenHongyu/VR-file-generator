@@ -61,7 +61,7 @@ This app allows users customize two forms: configuratoin file form (used in conf
 
 Note: Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output file look like? You should be able to write out the output JSON files by hand.
 
-#### Form entry definition
+### Form entry definition
 
 Form entry definitions are JSON objects. For each definition, three key-value pairs are required:
 - `"label"`: This is the label for this entry at display. The value must be a string. Note that this does not affect the output of this entry in the resulting JSON file.
