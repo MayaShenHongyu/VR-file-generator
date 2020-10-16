@@ -2,8 +2,10 @@
 
 This file generator generates files for the VR experiment based on user requirements. There are two kinds of files you can generate: VR configuration file and trial file.
 
+## Usage
+
 #### Generate VR configuration files
-Click on the "Generate configuration" button on the home page, and you will see the configuration file form:
+Click on the "Generate configuration" button on the home page, and you will see the form for generating configuration files:
 
 <img src="/images/configuration_file_builder.png" alt="Config builder" width="70%" />
 
@@ -55,9 +57,9 @@ In JSON, values must be one of the following data types:
 
 
 ## Customize forms
-This app allows users customize two forms with JSON files: configuratoin file form (in configuration file builder) and object form (in scene builder). The file should be a JSON array containing form entry definitions. Each definition configures an entry in the form.
+This app allows users customize two forms: configuratoin file form (used in configuration file builder) and object form (used in scene builder). A form can be customized with a JSON array containing form entry definitions. Each definition configures an entry in the form.
 
-Note: Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output JSON file look like? You should be able to hand write the output JSON files.
+Note: Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output file look like? You should be able to write out the output JSON files by hand.
 
 #### Form entry definition
 
@@ -238,3 +240,97 @@ If the imported file contains no error, you can click on the 'Save settings' but
 The change will be reflected in the form:
 
 <img src="/images/changed_form.png" alt="Import" width="70%" />
+
+### Appendix: example
+```yaml
+[
+    {
+        "key": "subjNum",
+        "label": "Subject Number",
+        "type": "number",
+        "defaultValue": 4
+    },
+    {
+        "key": "subjSex",
+        "label": "Subject Sex",
+        "type": "select",
+        "defaultValue": "male",
+        "options": {
+            "male": "Male",
+            "female": "Female",
+            "non_binary": "Non binary"
+        }
+    },
+    {
+        "key": "something",
+        "label": "Test",
+        "type": "switch",
+        "defaultValue": true
+    },
+    {
+        "key": "trialFile",
+        "label": "Trial file",
+        "type": "text",
+        "defaultValue": "config",
+        "addonAfter": ".json"
+    },
+    {
+        "key": "feedbackColor",
+        "label": "Feedback Color",
+        "type": "select",
+        "defaultValue": "black",
+        "options": {
+            "black": "Black",
+            "blue": "Blue",
+            "gray": "Gray",
+            "pink": "Pink"
+        }
+    },
+    {
+        "key": "collectConfidence",
+        "label": "Collect Condifence Rating",
+        "type": "switch",
+        "defaultValue": false
+    },
+    {
+        "key": "coordinates",
+        "label": "Coordinates (X, Y, Z)",
+        "type": "list",
+        "listSize": 3,
+        "itemType": "number",
+        "defaultValue": [
+            1,
+            2,
+            3
+        ]
+    },
+    {
+        "key": "group",
+        "label": "Group",
+        "type": "number",
+        "defaultValue": 1
+    }
+]
+```
+The above setting configures the following form:
+
+<img src="/images/VR_config_form.png" alt="Example form" width="70%" />
+
+And the generated file looks like:
+
+```yaml
+{
+    "subjNum": 4,
+    "subjSex": "male",
+    "something": true,
+    "trialFile": "config.json",
+    "feedbackColor": "black",
+    "collectConfidence": false,
+    "coordinates": [
+        1,
+        2,
+        3
+    ],
+    "group": 1
+}
+```
