@@ -65,7 +65,7 @@ Note: Before using this feature, you need to make sure you can describe the desi
 
 Form entry definitions are JSON objects. For each definition, three key-value pairs are required:
 - `"label"`: This is the label for this entry at display. The value must be a string. Note that this does not affect the output of this entry in the resulting JSON file.
-- `"key"`: This is the key for this entry in the resulting JSON file. The value must be a string.
+- `"key"`: This is the key for this entry in the resulting JSON file. The value must be a string. Note that all Form Entry Definiton keys in a form setting must be unique.
 - `"type"`: This refers to the input type of this entry. This file generator supports five different types: `"text"`, `"number"`, `"switch"` (true or false), `"selection"` (a dropdown menu), `"list"` (a list of texts or numbers).
 - (Optional) `"tooltip"`: Documentation for this entry. The value must be a string.
 - Depending on the input type, different key-value pairs are required, which is discussed in detials below. *(Optional) means that the key-value pair is optional.
@@ -81,7 +81,7 @@ For example:
 ```
 This definition produces:
 
-<img src="/images/form_entry_definition.png" alt="Form Entry Definition" height=60/>
+<img src="/images/form_entry_definition.png" alt="Form Entry Definition" height=120/>
 
 And if I type in `8`, the output file will look like this:
 ```yaml
@@ -202,7 +202,7 @@ In the output:
 ##### `"list"`
 - `"itemType"`: The type of elements in list. Either `"number"` or `"text"`.
 - `"listSize"`: The number of elements in list. Should be smaller than 5.
-- (Optional) `"defaultValue"`: Default value for this entry. This must be a list containing `"listSize"` elements of type `"itemType"`. If `"listSize"` is `2` and `"itemType"` is `"text"`, then `"defaultValue"` could be `["value1", "value2]`.
+- (Optional) `"defaultValue"`: Default value for this entry. This must be a list containing `"listSize"` elements of type `"itemType"`. If `"listSize"` is `2` and `"itemType"` is `"text"`, then `"defaultValue"` could be `["value1", "value2"]`.
 
 For example:
 
