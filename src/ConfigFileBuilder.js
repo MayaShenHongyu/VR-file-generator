@@ -34,6 +34,9 @@ export const ConfigFileBuilder = () => {
     // On finishing the form
     const onFinish = (values) => {
         console.log("Success:", values);
+        // if (values.trialFile !== undefined) {
+        //     values.trialFile = '~\\..\\Assets\\Trials\\' + values.trialFile;
+        // }
         setFormResult(values);
         displayDialogue();
     };
@@ -68,6 +71,7 @@ export const ConfigFileBuilder = () => {
                 centered
                 visible={isGeneratingFile}
                 title="Save file as"
+                maskClosable={false}
                 onCancel={() => setIsGeneratingFile(false)}
                 footer={[submitButton]}
             >
@@ -136,6 +140,7 @@ export const ConfigFileBuilder = () => {
                 formEntryDefinitions={formSetting}
                 onSubmit={onFinish}
                 submitButtonText="Generate configuration file"
+                labelWidth={8}
             />
             {renderSaveFileAsModal()}
         </ScrollPanel>

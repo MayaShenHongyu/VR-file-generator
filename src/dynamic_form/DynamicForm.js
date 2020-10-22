@@ -105,18 +105,31 @@ export const DynamicForm = ({
     inputWidth = 12
 }) => {
     const [form] = Form.useForm();
-    const [addOns, setAddOns] = useState({});
+    // const [addOnProcessors, setAddOnProcessors] = useState({});
 
     useEffect(() => {
         if (formEntryDefinitions !== undefined) {
             /**
              * Some text entires have add-ons (e.g. the `.json` add-on in `File name: *some user input*.json`).
-             * Need to extract them and later on attach them to their corresponding entries after user submits form.
+             * Need to extract them and attach them to their corresponding entries after user submits form.
              */
-            const entriesWithAddOn = formEntryDefinitions
-                .filter((val) => val.addonAfter)
-                .map((val) => ({ [val.key]: val.addonAfter }));
-            setAddOns(Object.assign({}, ...entriesWithAddOn));
+            // const addOnProcessors = formEntryDefinitions
+            //     .map(val => {
+            //         const { key, addonAfter, addonBefore } = val;
+            //         const after = addonAfter ? addonAfter.text : "";
+            //         const before = addonBefore ? addonBefore.text : "";
+            //         return { [key]: (result) => before + result + after };
+            //     });
+            // setAddOnProcessors(Object.assign({}, ...addOnProcessors));
+            // const addOnProcessors = formEntryDefinitions
+            //     .filter(val => val.addonAfter || val.addonBefore)
+            //     .map(val => {
+            //         const { key, addonAfter, addonBefore } = val;
+            //         const after = addonAfter ? addonAfter.text : "";
+            //         const before = addonBefore ? addonBefore.text : "";
+            //         return [key, (result) => before + result + after] ;
+            //     });
+            // setAddOnProcessors(Object.fromEntries(addOnProcessors));
 
             if (initialValues) {
                 form.setFieldsValue(initialValues);
@@ -145,10 +158,31 @@ export const DynamicForm = ({
     };
 
     const onFinish = (values) => {
-        const processedEntries = Object.entries(values).map(([key, val]) => ({
-            [key]: addOns[key] ? val + addOns[key] : val,
-        }));
-        onSubmit(Object.assign({}, ...processedEntries));
+        // const processedEntries = Object.entries(values).map(([key, val]) => ({
+        //     // [key]: addOns[key] ? val + addOns[key] : val,
+        //     [key]: addOns[key](val),
+        // }));
+        // onSubmit(Object.assign({}, ...processedEntries));
+        const processedResult = formEntryDefinitions
+                        .reduce((acc, entry) => {
+                            const { key, type } = entry;
+                            let processedVal = values[key];
+                            if (type === "text") {
+                                const { addonAfter, addonBefore } = entry;
+                                const after = addonAfter !== undefined ? addonAfter.text : "";
+                                const before = addonBefore !== undefined ? addonBefore.text : "";
+                                processedVal = before + processedVal + after;
+                            }
+
+                            return { ...acc, [key]: processedVal };
+                        }, {});
+        onSubmit(processedResult);
+        // const processedResult = Object.fromEntries(
+        //     Object.entries(values).map(
+        //       ([key, val]) => [key, key in addOnProcessors ? addOnProcessors[key](val) : val]
+        //     )
+        //   );
+        // onSubmit(values);
     };
 
     return (

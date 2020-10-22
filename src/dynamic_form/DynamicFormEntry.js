@@ -52,6 +52,13 @@ export const DynamicFormEntry = ({ val: entryDefinition }) => {
         );
     };
 
+    const renderText = () => {
+        const { addonAfter, addonBefore } = entryDefinition;
+        const addonAfterText = (addonAfter && addonAfter.display) && addonAfter.text;
+        const addonBeforeText = (addonBefore && addonBefore.display) && addonBefore.text;
+        return <Input addonAfter={addonAfterText} addonBefore={addonBeforeText} />
+    }
+
     const getAdditionalProps = () => {
         /**
          * Validation rule for the entry. 
@@ -83,7 +90,8 @@ export const DynamicFormEntry = ({ val: entryDefinition }) => {
         ) : type === "switch" ? (
             <Switch />
         ) : type === "text" ? (
-            <Input addonAfter={entryDefinition.addonAfter} />
+            // <Input addonAfter={entryDefinition.addonAfter} />
+            renderText()
         ) : type === "select" ? (
             renderSelect()
         ) : type === "list" ? (

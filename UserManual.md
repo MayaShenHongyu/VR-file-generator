@@ -96,7 +96,15 @@ And if I type in `8`, the output file will look like this:
 
 ##### `"text"`
 - (Optional) `"defaultValue"`: Default value for this entry. This must be a string.
-- (Optional) `"addonAfter"`: An add-on at the end of the input. This must be a String. The output of this entry is the concatenation of user input and the `"addonAfter"` value.
+- (Optional) `"addonAfter"`: An add-on at the end of the input. This must be an object of the following format:
+    ```yaml
+    {
+        "text": ".json",
+        "display": true
+    }
+    ```
+    `"text"` is the text to be added on to the user input value. For instance, if user inputs "config", then the result will be "config.json". `"display"` denotes whether or not this add-on is displayed to the user in the form.
+- (Optional) `"addonBefore"`: An add-on at the start of the input. Same format as `"addonAfter"`.
 
 For example:
 ```yaml
@@ -105,7 +113,14 @@ For example:
     "label": "Trial file",
     "type": "text",
     "defaultValue": "config",
-    "addonAfter": ".json"
+    "addonAfter": {
+        "text": ".json",
+        "display": true
+    },
+    "addonBefore": {
+        "text": "~\\..\\Assets\\Trials\\",
+        "display": false
+    }
 }
 ```
 <img src="/images/text.png" alt="Text" height=60/>
@@ -113,7 +128,7 @@ For example:
 In the output:
 ```yaml
 {
-    "trialFile": "config.json",
+    "trialFile": "~\\..\\Assets\\Trials\\config.json",
     ...
 }
 ```

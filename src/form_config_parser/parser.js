@@ -21,11 +21,11 @@ export const parseFormSetting = (entries) => {
 const parseEntryDefinition = (entryDefinition) => {
     const { key, label, type, tooltip } = entryDefinition;
     const errorMessages = [];
-    if (key === undefined || typeof key !== "string") {
+    if (typeof key !== "string") {
         errorMessages.push("Must contain `key`, which should be a string.");
     }
 
-    if (label === undefined || typeof label !== "string") {
+    if (typeof label !== "string") {
         errorMessages.push("Must contain `label`, which should be a string.");
     }
 
@@ -68,13 +68,24 @@ const parseNumber = (numberEntry, errorMessages) => {
 };
 
 const parseText = (textEntry, errorMessages) => {
-    const { defaultValue, addonAfter } = textEntry;
+    const { defaultValue, addonAfter, addonBefore } = textEntry;
     if (defaultValue !== undefined && typeof defaultValue !== "string") {
         errorMessages.push("`defaultValue` of a text entry should be a string");
     }
 
-    if (addonAfter !== undefined && typeof addonAfter !== "string") {
-        errorMessages.push("`addOnAfter` should be a string");
+
+    if (addonAfter !== undefined) {
+        const { text, display } = addonAfter;
+        if (typeof text !== "string" || typeof display !== "boolean") {
+            errorMessages.push("`addOnAfter` should be an object with format: {\"text\": \"text to add on\", \"display\": true/false} ");
+        } 
+    }
+
+    if (addonBefore !== undefined) {
+        const { text, display } = addonBefore;
+        if (typeof text !== "string" || typeof display !== "boolean") {
+            errorMessages.push("`addOnBefore` should be an object with format: {\"text\": \"text to add on\", \"display\": true/false} ");
+        } 
     }
 };
 

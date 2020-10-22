@@ -137,10 +137,14 @@ export const TrialFileBuilder = () => {
                 (list, _i) => list.concat(selectedScenes),
                 []
             );
-            // Randomize the scenes, then add `trialNum` to each scene.
+            // Randomize the scenes, add `trialNum` and `trialName` to each scene.
             const processedTrials = randomizeList(
                 trials
-            ).map((scene, i) => ({ trialNum: i + 1, ...scene }));
+            ).map((scene, i) => {
+                const trial = { trialNum: i + 1, trialName: scene.sceneName ?? `Scene ${i + 1}`, ...scene };
+                delete trial.sceneName;
+                return trial;
+            });
             const trileFile = { trials: processedTrials };
             generateTrialFile(trileFile, fileName);
         }

@@ -126,6 +126,7 @@ export const SceneBuilder = () => {
                     centered
                     visible={isEditingObject}
                     title="Edit object"
+                    maskClosable={false}
                     onCancel={onCloseModal}
                     footer={[]}
                 >
