@@ -1,12 +1,14 @@
 {
-    "name": "config-gen",
+    "name": "vr-file-generator",
     "version": "0.1.0",
     "private": true,
     "description": "VR file generator",
     "author": "Maya Shen",
     "main": "public/electron.js",
     "build": {
-        "appId": "something.something"
+        "appId": "com.electron.vr-file-generator",
+        "productName": "VR File Generator",
+        "copyright": "Copyright © year ${author}"
     },
     "homepage": "./",
     "dependencies": {
