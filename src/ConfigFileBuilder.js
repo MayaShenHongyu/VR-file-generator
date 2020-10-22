@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./App.css";
 import {
-    loadConfigForm,
+    loadConfigFormSetting,
     loadConfigOutputPath,
     storeConfigOutputPath,
-} from "./database/form_config";
+} from "./database/formSettingsDB";
 import { Result, Modal, Button, Input } from "antd";
 import "./layout.css";
 import { ScrollPanel } from "./ScrollPanel";
@@ -16,42 +15,48 @@ const { dialog } = window.require("electron").remote;
 const fs = window.require("fs");
 const path = window.require("path");
 
-const ConfigForm = () => {
-    const [formEntries, setFormEntries] = useState(undefined);
-    const [formValues, setFormValues] = useState(undefined);
+/**
+ * This is the page where user fills in information to generate a VR configuration file.
+ */
+export const ConfigFileBuilder = () => {
+    const [formSetting, setFormSetting] = useState(undefined);
+    const [formResult, setFormResult] = useState(undefined);
     const [outputPath, setOutputPath] = useState(undefined);
-    const [submitted, setSubmitted] = useState(false);
+    const [finishedGeneratingFile, setFinishedGeneratingFile] = useState(false);
     const [isGeneratingFile, setIsGeneratingFile] = useState(false);
     const [fileName, setFileName] = useState("config");
 
     useEffect(() => {
-        loadConfigForm(setFormEntries);
+        loadConfigFormSetting(setFormSetting);
         loadConfigOutputPath(setOutputPath);
     }, []);
 
+    // On finishing the form
     const onFinish = (values) => {
         console.log("Success:", values);
+        setFormResult(values);
         displayDialogue();
-        setFormValues(values);
     };
 
     const generateFile = () => {
         const filepath = path.join(outputPath, `${fileName}.json`);
         fs.writeFileSync(
             filepath,
-            JSON.stringify(formValues, null, 4),
+            JSON.stringify(formResult, null, 4),
             (error) => {
                 if (error) {
                     console.log(error);
-                    setSubmitted(false);
+                    setFinishedGeneratingFile(false);
                     alert(`ERROR: Could not save file to ${filepath}`);
                 }
             }
         );
-        setSubmitted(true);
+        // Triggers success message
+        setFinishedGeneratingFile(true);
     };
 
-    const getModal = () => {
+    // This modal asks users to type in the name of the file to be generated
+    const renderSaveFileAsModal = () => {
         const submitButton = (
             <Button key="submit" onClick={generateFile}>
                 Save
@@ -75,6 +80,7 @@ const ConfigForm = () => {
         );
     };
 
+    // This dialogue asks user to select a directory to generate the file in
     const displayDialogue = () => {
         dialog
             .showOpenDialog({
@@ -84,14 +90,16 @@ const ConfigForm = () => {
             })
             .then((response) => {
                 if (!response.canceled) {
-                    // handle fully qualified file name
+                    // Handle fully qualified file name
                     const path = response.filePaths[0];
-                    console.log(path);
+                    // This is used for display in the success message
                     setOutputPath(path);
+                    // Store path as default path into the database
                     storeConfigOutputPath(path);
+                    // This will trigger the Save File As Modal to be visible
                     setIsGeneratingFile(true);
                 } else {
-                    throw new Error("no directory selected");
+                    throw new Error("No directory selected");
                 }
             })
             .catch((err) => {
@@ -99,7 +107,7 @@ const ConfigForm = () => {
             });
     };
 
-    if (submitted) {
+    if (finishedGeneratingFile) {
         return (
             <div className="center">
                 <Result
@@ -125,13 +133,11 @@ const ConfigForm = () => {
                 description="Enter the experiment parameters to create a basic configuration file that is formatted for use with the VR Simulator. The experimenter will change certain parameters in this file between experiments."
             />
             <DynamicForm
-                formEntries={formEntries}
+                formEntryDefinitions={formSetting}
                 onSubmit={onFinish}
-                submitButtonText="Generate config file"
+                submitButtonText="Generate configuration file"
             />
-            {getModal()}
+            {renderSaveFileAsModal()}
         </ScrollPanel>
     );
 };
-
-export default ConfigForm;

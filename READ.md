@@ -61,12 +61,13 @@ This app allows users customize two forms: configuratoin file form (used in conf
 
 Note: Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output file look like? You should be able to write out the output JSON files by hand.
 
-### Form entry definition
+### Form Entry Definition
 
 Form entry definitions are JSON objects. For each definition, three key-value pairs are required:
 - `"label"`: This is the label for this entry at display. The value must be a string. Note that this does not affect the output of this entry in the resulting JSON file.
 - `"key"`: This is the key for this entry in the resulting JSON file. The value must be a string.
 - `"type"`: This refers to the input type of this entry. This file generator supports five different types: `"text"`, `"number"`, `"switch"` (true or false), `"selection"` (a dropdown menu), `"list"` (a list of texts or numbers).
+- (Optional) `"tooltip"`: Documentation for this entry. The value must be a string.
 - Depending on the input type, different key-value pairs are required, which is discussed in detials below. *(Optional) means that the key-value pair is optional.
 
 For example:
@@ -74,12 +75,13 @@ For example:
 {
     "key": "subjNum",
     "label": "Subject Number",
-    "type": "number"
+    "type": "number",
+    "tooltip": "This is a tooltip"
 }
 ```
 This definition produces:
 
-<img src="/images/label.png" alt="Label" height=60/>
+<img src="/images/form_entry_definition.png" alt="Form Entry Definition" height=60/>
 
 And if I type in `8`, the output file will look like this:
 ```yaml
@@ -119,6 +121,8 @@ In the output:
 
 ##### `"number"`
 - (Optional) `"defaultValue"`: Default value for this entry. This must be a number.
+- (Optional) `"max"`: Maximum value for this entry. Must be a number.
+- (Optional) `"min"`: Minimum value for this entry. Must be a number.
 
 For example:
 ```yaml
@@ -126,7 +130,9 @@ For example:
     "key": "subjNum",
     "label": "Subject Number",
     "type": "number",
-    "defaultValue": 8
+    "defaultValue": 8,
+    "max": 10,
+    "min": 1
 }
 ```
 <img src="/images/number.png" alt="Number" height=60/>

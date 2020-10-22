@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./App.css";
 import {
-    loadConfigForm,
-    storeConfigForm,
-    loadObjectForm,
-    storeObjectForm,
-} from "./database/form_config";
+    loadConfigFormSetting,
+    storeConfigFormSetting,
+    loadObjectFormSetting,
+    storeObjectFormSetting,
+} from "./database/formSettingsDB";
 import { Tabs, Input, Button, Col, Row, message } from "antd";
 import "./layout.css";
-import { parseConfig } from "./form_config_parser/parser";
+import { parseFormSetting } from "./form_config_parser/parser";
 import { ScrollPanel } from "./ScrollPanel";
 import { Header } from "./Header";
 
 const { dialog } = window.require("electron").remote;
 const fs = window.require("fs");
 
-const FormSettingsPage = () => {
+/**
+ * Form settings page for users to customize configuration file form and object form.
+ */
+export const FormSettingsPage = () => {
     return (
         <ScrollPanel>
             <Link className="back-button" to="/">
@@ -26,15 +28,15 @@ const FormSettingsPage = () => {
             <div style={{ margin: "0 10vw" }}>
                 <Tabs defaultActiveKey="1">
                     <Tabs.TabPane tab="Configuration file form" key="1">
-                        <ImportFormSetting
-                            loadFormConfig={loadConfigForm}
-                            storeFormConfig={storeConfigForm}
+                        <FormSetting
+                            loadFormSetting={loadConfigFormSetting}
+                            storeFormSetting={storeConfigFormSetting}
                         />
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Object form" key="2">
-                        <ImportFormSetting
-                            loadFormConfig={loadObjectForm}
-                            storeFormConfig={storeObjectForm}
+                        <FormSetting
+                            loadFormSetting={loadObjectFormSetting}
+                            storeFormSetting={storeObjectFormSetting}
                         />
                     </Tabs.TabPane>
                 </Tabs>
@@ -43,27 +45,30 @@ const FormSettingsPage = () => {
     );
 };
 
-const ImportFormSetting = ({ loadFormConfig, storeFormConfig }) => {
-    const [formConfig, setFormConfig] = useState([]);
-    const [generalMessage, setGeneralMessage] = useState(undefined);
-    const [entryErrorMessages, setEntryErrorMessages] = useState(undefined);
-    const [unsaved, setUnsaved] = useState(false);
+/**
+ * A single form setting importer.
+ */
+const FormSetting = ({ loadFormSetting, storeFormSetting }) => {
+    const [formSetting, setFormSetting] = useState([]);
+    const [generalMessage, setGeneralMessage] = useState(undefined); // General message indicating whether there is a problem with the imported form setting
+    const [entryErrorMessages, setEntryErrorMessages] = useState(undefined); // Error messages for each Form Entry Definition
+    const [unsaved, setUnsaved] = useState(false); // True if a form setting is imported but not yet saved
 
     useEffect(() => {
-        loadFormConfig(setFormConfig);
-    }, [loadFormConfig]);
+        loadFormSetting(setFormSetting);
+    }, [loadFormSetting]);
 
-    const parseNewConfig = (newConfig) => {
-        setFormConfig(newConfig);
+    const parseNewConfig = (newSetting) => {
+        setFormSetting(newSetting);
         setUnsaved(true);
-        if (!Array.isArray(newConfig)) {
+        if (!Array.isArray(newSetting)) {
             setGeneralMessage(
-                "Configuration should be a list of objects. Please revise the configuration and import again."
+                "Form setting should be a list of Form Entry Definitions. Please revise and import again."
             );
         } else {
-            const errorMessages = parseConfig(newConfig);
-            setEntryErrorMessages(errorMessages);
-            if (errorMessages === undefined) {
+            const entryErrorMessages = parseFormSetting(newSetting);
+            setEntryErrorMessages(entryErrorMessages);
+            if (entryErrorMessages === undefined) {
                 setGeneralMessage(undefined);
             } else {
                 setGeneralMessage("Please revise and import again.");
@@ -90,7 +95,7 @@ const ImportFormSetting = ({ loadFormConfig, storeFormConfig }) => {
         );
     };
 
-    const renderEntryMessages = () => {
+    const maybeRenderEntryMessages = () => {
         return (
             entryErrorMessages &&
             Array.from(entryErrorMessages).map((val) => renderEntryMessage(val))
@@ -101,11 +106,12 @@ const ImportFormSetting = ({ loadFormConfig, storeFormConfig }) => {
         return (
             <div className="small-margin" style={{ color: "red" }}>
                 <Row style={{ fontSize: "1.1em" }}>{generalMessage}</Row>
-                {renderEntryMessages()}
+                {maybeRenderEntryMessages()}
             </div>
         );
     };
 
+    // File selecting dialog
     const loadFile = () => {
         dialog
             .showOpenDialog({
@@ -127,16 +133,16 @@ const ImportFormSetting = ({ loadFormConfig, storeFormConfig }) => {
             });
     };
 
-    const renderSaveButton = () => {
-        const canSave = generalMessage === undefined;
+    const renderSaveOrCancelButton = () => {
+        const canSave = generalMessage === undefined; // Indicates there is no problem with the form setting
         const visibility = unsaved ? "visible" : "hidden";
         const onClick = () => {
             setUnsaved(false);
-            if (canSave) {
-                storeFormConfig(formConfig);
+            if (canSave) { // `Save settings`
+                storeFormSetting(formSetting);
                 message.success("Successfully saved.");
-            } else {
-                loadFormConfig(setFormConfig);
+            } else { // `Cancel`
+                loadFormSetting(setFormSetting);
                 setGeneralMessage(undefined);
                 setEntryErrorMessages(undefined);
             }
@@ -152,18 +158,16 @@ const ImportFormSetting = ({ loadFormConfig, storeFormConfig }) => {
         <div>
             <Input.TextArea
                 rows={10}
-                value={JSON.stringify(formConfig, null, 4)}
+                value={JSON.stringify(formSetting, null, 4)}
             />
             <div
                 className="small-margin"
                 style={{ display: "flex", justifyContent: "space-between" }}
             >
                 <Button onClick={loadFile}>Import new settings</Button>
-                {renderSaveButton()}
+                {renderSaveOrCancelButton()}
             </div>
             {renderErrorMessages()}
         </div>
     );
 };
-
-export default FormSettingsPage;

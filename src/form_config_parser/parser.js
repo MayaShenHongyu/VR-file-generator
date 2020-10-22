@@ -1,10 +1,14 @@
-const types = ["number", "text", "switch", "select", "list"];
 
-export const parseConfig = (entries) => {
+// Parse a form setting file and return error messages if issues are found.
+export const parseFormSetting = (entries) => {
     const errorMessages = [];
+    const keys = entries.map(entry => entry.key);
     entries.forEach((entry, index) => {
-        const messages = parseEntry(entry);
-        if (messages) {
+        const messages = parseEntryDefinition(entry);
+        if (keys.indexOf(entry.key) !== index) {
+            messages.push(`${entry.key} is a duplicate key.`)
+        }
+        if (messages.length !== 0) {
             errorMessages.push({ index, messages });
         }
     });
@@ -14,8 +18,8 @@ export const parseConfig = (entries) => {
     }
 };
 
-const parseEntry = (entry) => {
-    const { key, label, type } = entry;
+const parseEntryDefinition = (entryDefinition) => {
+    const { key, label, type, tooltip } = entryDefinition;
     const errorMessages = [];
     if (key === undefined || typeof key !== "string") {
         errorMessages.push("Must contain `key`, which should be a string.");
@@ -25,31 +29,33 @@ const parseEntry = (entry) => {
         errorMessages.push("Must contain `label`, which should be a string.");
     }
 
+    if (tooltip !== undefined && typeof tooltip !== "string") {
+        errorMessages.push("`tooltip` must be a string.")
+    }
+
     switch (type) {
         case "number":
-            parseNumber(entry, errorMessages);
+            parseNumber(entryDefinition, errorMessages);
             break;
         case "text":
-            parseText(entry, errorMessages);
+            parseText(entryDefinition, errorMessages);
             break;
         case "switch":
-            parseSwitch(entry, errorMessages);
+            parseSwitch(entryDefinition, errorMessages);
             break;
         case "select":
-            parseSelect(entry, errorMessages);
+            parseSelect(entryDefinition, errorMessages);
             break;
         case "list":
-            parseList(entry, errorMessages);
+            parseList(entryDefinition, errorMessages);
             break;
         default:
             errorMessages.push(
-                `Must contain \`type\`, which should be one of ${types.join(", ")}.`
+                `Must contain \`type\`, which should be one of number, text, switch, select, list.`
             );
     }
 
-    if (errorMessages.length !== 0) {
-        return errorMessages;
-    }
+    return errorMessages;
 };
 
 const parseNumber = (numberEntry, errorMessages) => {
@@ -135,7 +141,7 @@ const parseList = (listEntry, errorMessages) => {
         );
     }
 
-    const checkDefaultValueContainsType = (type) => {
+    const checkIfDefaultListOnlyContainsType = (type) => {
         if (defaultValue !== undefined) {
             const isValid = Array.from(defaultValue).every(
                 (val) => typeof val === type
@@ -150,17 +156,14 @@ const parseList = (listEntry, errorMessages) => {
 
     switch (itemType) {
         case "number":
-            checkDefaultValueContainsType("number");
+            checkIfDefaultListOnlyContainsType("number");
             break;
         case "text":
-            checkDefaultValueContainsType("string");
-            break;
-        case "switch":
-            checkDefaultValueContainsType("boolean");
+            checkIfDefaultListOnlyContainsType("string");
             break;
         default:
             errorMessages.push(
-                "List entry must contain `itemType`, which should be `number`, `text`, or `switch`"
+                "List entry must contain `itemType`, which should be `number` or `text`"
             );
     }
 };

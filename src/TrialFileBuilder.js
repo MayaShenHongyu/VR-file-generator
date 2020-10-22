@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./App.css";
-import { loadScenes, storeScenes } from "./database/scenes";
+import { loadScenes, storeScenes } from "./database/scenesDB";
 import {
     loadTrialOutputPath,
     storeTrialOutputPath,
-} from "./database/form_config";
+} from "./database/formSettingsDB";
 import { Header } from "./Header";
 import {
     Form,
@@ -25,22 +24,39 @@ const { dialog } = window.require("electron").remote;
 const fs = window.require("fs");
 const path = window.require("path");
 
-const CreateTrialPage = () => {
-    const [availableScenes, setAvailableScenes] = useState([]);
+// Helper method for randomizing the elements in a list
+const randomizeList = (list) => list
+                                .map((a) => ({ sort: Math.random(), value: a }))
+                                .sort((a, b) => a.sort - b.sort)
+                                .map((a) => a.value);
+
+/**
+ * Page for users to generated trial files by selecting avaliable scenes.
+ */
+export const TrialFileBuilder = () => {
+    const [availableScenes, setAvailableScenes] = useState(undefined);
     const [selectedScenes, setSelectedScenes] = useState([]);
     const [outputPath, setOutputPath] = useState(undefined);
-    const [submitted, setSubmitted] = useState(false);
+    const [finishedGeneratingFile, setFinishedGeneratingFile] = useState(false);
 
     useEffect(() => {
         loadScenes(setAvailableScenes);
         loadTrialOutputPath(setOutputPath);
     }, []);
 
-    useEffect(
-        () => () => storeScenes([...availableScenes, ...selectedScenes]),
-        [availableScenes, selectedScenes]
-    );
+    // useEffect(() => {
+    //     console.log(`After available scenes change: ${availableScenes ? availableScenes.map(s => s.sceneName) : availableScenes}`);
+    // }, [availableScenes]);
 
+    // Stores updated scenes to the database
+    useEffect(() => {
+        if (availableScenes !== undefined) {
+            // console.log(`cleanup: ${availableScenes.map(s => s.sceneName)}`)
+            storeScenes([...availableScenes, ...selectedScenes])
+        }
+    }, [availableScenes, selectedScenes])
+
+    // Select the scene at a specific index in availableScenes
     const selectScene = (index) => {
         const selectedScene = availableScenes[index];
         setAvailableScenes([
@@ -50,6 +66,7 @@ const CreateTrialPage = () => {
         setSelectedScenes([...selectedScenes, selectedScene]);
     };
 
+    // Move the scene at a specific index in selectedScenes back to availableScenes
     const removeSceneFromSelected = (index) => {
         const removedScene = selectedScenes[index];
         setSelectedScenes([
@@ -59,46 +76,44 @@ const CreateTrialPage = () => {
         setAvailableScenes([...availableScenes, removedScene]);
     };
 
+    // Delete a scene at a specific index in selectedScenes
+    const deleteScene = (index) => {
+        setAvailableScenes([
+            ...availableScenes.slice(0, index),
+            ...availableScenes.slice(index + 1),
+        ]);
+    };
+
     const renderAvailableScenes = () => {
-        const deleteScene = (index) => {
-            setAvailableScenes([
-                ...availableScenes.slice(0, index),
-                ...availableScenes.slice(index + 1),
-            ]);
-        };
+        if (availableScenes === undefined) {
+            // console.log("Render available scenes: undefined")
+            return undefined;
+        }
+        // console.log(`Render available scenes: ${availableScenes.map(s => s.sceneName)}`);
         return availableScenes.map((scene, index) => {
-            if (scene.sceneName === undefined) {
-                return undefined;
-            }
             return (
-                // <Button block key={index} onClick={() => selectScene(index)}>
-                //     {scene.sceneName}
-                // </Button>
-                <div key={index} className="available-scene">
-                    <Button
-                        className="available-scene-button"
-                        onClick={() => selectScene(index)}
-                    >
-                        {scene.sceneName}
-                    </Button>
-                    <Popconfirm
-                        title="Are you sure to delete this form entry?"
-                        onConfirm={() => deleteScene(index)}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button icon={<DeleteOutlined />} />
-                    </Popconfirm>
-                </div>
+                    <div key={index} className="available-scene">
+                        <Button
+                            className="available-scene-button"
+                            onClick={() => selectScene(index)}
+                        >
+                            {scene.sceneName ?? `Scene ${index + 1}`}
+                        </Button>
+                        <Popconfirm
+                            title="Are you sure to delete this scene?"
+                            onConfirm={() => deleteScene(index)}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button href="#" icon={<DeleteOutlined />} />
+                        </Popconfirm>
+                    </div>
             );
         });
     };
 
     const renderSelectedScenes = () => {
         return selectedScenes.map((scene, index) => {
-            if (scene.sceneName === undefined) {
-                return undefined;
-            }
             return (
                 <Button
                     block
@@ -106,37 +121,33 @@ const CreateTrialPage = () => {
                     key={index}
                     onClick={() => removeSceneFromSelected(index)}
                 >
-                    {scene.sceneName}
+                    {scene.sceneName ?? `Scene ${index + 1}`}
                 </Button>
             );
         });
     };
 
-    const randomizeList = (list) => {
-        return list
-            .map((a) => ({ sort: Math.random(), value: a }))
-            .sort((a, b) => a.sort - b.sort)
-            .map((a) => a.value);
-    };
-
-    const onGenerateTrial = (values) => {
+    const onSubmit = (values) => {
         if (selectedScenes.length === 0) {
             message.error("Please select at least one scene");
         } else {
             const { fileName, repeatedTimes } = values;
-            const preprocessedScenes = [...Array(repeatedTimes).keys()].reduce(
+            // Repeat the scenes for `repeatedTimes` times
+            const trials = [...Array(repeatedTimes).keys()].reduce(
                 (list, _i) => list.concat(selectedScenes),
                 []
             );
-            const processedSelectedScenes = randomizeList(
-                preprocessedScenes
+            // Randomize the scenes, then add `trialNum` to each scene.
+            const processedTrials = randomizeList(
+                trials
             ).map((scene, i) => ({ trialNum: i + 1, ...scene }));
-            const trileFile = { trials: processedSelectedScenes };
-            saveFile(trileFile, fileName);
+            const trileFile = { trials: processedTrials };
+            generateTrialFile(trileFile, fileName);
         }
     };
 
-    const saveFile = (file, fileName) => {
+    // Dialog for user to select where to generate the file
+    const generateTrialFile = (file, fileName) => {
         dialog
             .showOpenDialog({
                 properties: ["openDirectory"],
@@ -145,10 +156,11 @@ const CreateTrialPage = () => {
             })
             .then((response) => {
                 if (!response.canceled) {
-                    // handle fully qualified file name
+                    // Handle fully qualified file name
                     const path = response.filePaths[0];
-                    storeTrialOutputPath(path);
                     setOutputPath(path);
+                    // Store this path into the database so that next time this dialog will automatically navigate to that location 
+                    storeTrialOutputPath(path);
                     return path;
                 } else {
                     throw new Error("No path selected.");
@@ -156,15 +168,14 @@ const CreateTrialPage = () => {
             })
             .then((dirPath) => {
                 const filepath = path.join(dirPath, `${fileName}.json`);
-                setSubmitted(true);
-
+                setFinishedGeneratingFile(true);
                 fs.writeFileSync(
                     filepath,
                     JSON.stringify(file, null, 4),
                     (error) => {
                         if (error) {
                             console.log(error);
-                            setSubmitted(false);
+                            setFinishedGeneratingFile(false);
                             alert(`ERROR: Could not save file to ${filepath}`);
                         }
                     }
@@ -175,7 +186,8 @@ const CreateTrialPage = () => {
             });
     };
 
-    if (submitted) {
+    // Render a success notification if successully generated the file
+    if (finishedGeneratingFile) {
         return (
             <div className="center">
                 <Result
@@ -215,7 +227,7 @@ const CreateTrialPage = () => {
                 </div>
                 <div className="form-container">
                     <Form
-                        onFinish={onGenerateTrial}
+                        onFinish={onSubmit}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 8 }}
                     >
@@ -241,7 +253,7 @@ const CreateTrialPage = () => {
                         </Form.Item>
                         <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
                             <Button block type="primary" htmlType="submit">
-                                Generate Trial File
+                                Generate trial file
                             </Button>
                         </Form.Item>
                     </Form>
@@ -250,5 +262,3 @@ const CreateTrialPage = () => {
         </ScrollPanel>
     );
 };
-
-export default CreateTrialPage;

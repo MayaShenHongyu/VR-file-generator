@@ -22,15 +22,18 @@
     color: #ebf1f5;
 }
 
-.horizontal {
-    display: flex;
-    justify-content: space-evenly;
-    width: 60vw;
-}
-
 .App-link {
     font-size: calc(10px + 1.2vmin);
     color: #61dafb;
+    /* border: 1px solid #61dafb; */
+    /* border-radius: 1vmin; */
+    /* padding: 0.3rem; */
+    margin: 0.5rem;
+    display: inline;
+}
+
+.App-link > span {
+    margin-right: 5px;
 }
 
 @keyframes App-logo-spin {

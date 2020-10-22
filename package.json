@@ -4,10 +4,9 @@
     "private": true,
     "description": "VR file generator",
     "author": "Maya Shen",
-    "main": "electron.js",
+    "main": "public/electron.js",
     "build": {
-        "appId": "something.something",
-        "extends": null
+        "appId": "something.something"
     },
     "homepage": "./",
     "dependencies": {
@@ -15,7 +14,7 @@
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
-        "antd": "^4.6.3",
+        "antd": "^4.7.0",
         "bootstrap": "^4.5.2",
         "cross-env": "^7.0.2",
         "electron-is-dev": "^1.2.0",

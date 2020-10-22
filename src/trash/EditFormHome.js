@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./App.css";
+// import "./App.css";
 import { Button, Layout } from "antd";
 import { Header } from "../Header";
 import "./TrialFileBuilder.css";

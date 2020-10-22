@@ -1,19 +1,52 @@
-const db = window.require("electron").remote.require("./electron").formConfig;
-initDatabase();
+// Load database from electron main process
+const formSettingsDB = window.require("electron").remote.require("./electron").formConfig;
 
 const CONFIG_ID = "config_form";
 const SCENE_ID = "scene_form";
 const OBJECT_ID = "object_form";
 const TRIAL_ID = "trail";
 
-function loadForm(database_id, callback) {
-    db.findOne({ database_id }, (_err, doc) => {
+initDatabase();
+
+// Storing and retrieving object form setting
+export const loadObjectFormSetting = (callback) => loadFormSetting(OBJECT_ID, callback);
+export const storeObjectFormSetting = (entries) => storeFormSetting(OBJECT_ID, entries);
+
+// Retrieving scene form setting
+export const loadSceneFormSetting = (callback) => loadFormSetting(SCENE_ID, callback);
+
+// Storing and retrieving configuration file form setting
+export const loadConfigFormSetting = (callback) => loadFormSetting(CONFIG_ID, callback);
+export const storeConfigFormSetting = (entries) => storeFormSetting(CONFIG_ID, entries);
+
+// Storing and retrieving default output path of generated configuration files
+export const loadConfigOutputPath = (callback) =>
+    loadOutputPath(CONFIG_ID, callback);
+export const storeConfigOutputPath = (path) => storeOutputPath(CONFIG_ID, path);
+
+// Storing and retrieving default output path of generated trial files
+export const loadTrialOutputPath = (callback) =>
+    loadOutputPath(TRIAL_ID, callback);
+export const storeTrialOutputPath = (path) => storeOutputPath(TRIAL_ID, path);
+
+/**
+ * Generic helper function for retrieving form setting.
+ * @param {string} database_id 
+ * @param {Array[Object] => void} callback 
+ */
+function loadFormSetting(database_id, callback) {
+    formSettingsDB.findOne({ database_id }, (_err, doc) => {
         callback(doc.value.entries);
     });
 }
 
-function storeForm(database_id, entries) {
-    db.update(
+/**
+ * Generic helper function for storing form setting.
+ * @param {string} database_id 
+ * @param {Array[Object]} entries 
+ */
+function storeFormSetting(database_id, entries) {
+    formSettingsDB.update(
         { database_id: database_id },
         {
             $set: {
@@ -25,8 +58,13 @@ function storeForm(database_id, entries) {
     );
 }
 
+/**
+ * Generic helper function for storing default output path.
+ * @param {string} database_id 
+ * @param {string} path 
+ */
 function storeOutputPath(database_id, path) {
-    db.update(
+    formSettingsDB.update(
         { database_id: database_id },
         {
             $set: { "value.output_path": path },
@@ -34,30 +72,22 @@ function storeOutputPath(database_id, path) {
     );
 }
 
+/**
+ * Generic helper function for storing default output path.
+ * @param {string} database_id 
+ * @param {string => void} callback 
+ */
 function loadOutputPath(database_id, callback) {
-    db.findOne({ database_id: database_id }, (_err, doc) => {
+    formSettingsDB.findOne({ database_id: database_id }, (_err, doc) => {
         callback(doc.value.output_path);
     });
 }
 
-export const loadObjectForm = (callback) => loadForm(OBJECT_ID, callback);
-export const storeObjectForm = (entries) => storeForm(OBJECT_ID, entries);
-
-export const loadSceneForm = (callback) => loadForm(SCENE_ID, callback);
-// export const storeSceneForm = (entries) => storeForm(SCENE_ID, entries);
-
-export const loadConfigForm = (callback) => loadForm(CONFIG_ID, callback);
-export const storeConfigForm = (entries) => storeForm(CONFIG_ID, entries);
-export const loadConfigOutputPath = (callback) =>
-    loadOutputPath(CONFIG_ID, callback);
-export const storeConfigOutputPath = (path) => storeOutputPath(CONFIG_ID, path);
-
-export const loadTrialOutputPath = (callback) =>
-    loadOutputPath(TRIAL_ID, callback);
-export const storeTrialOutputPath = (path) => storeOutputPath(TRIAL_ID, path);
-
-const insert = () => {
-    db.insert({
+/**
+ * Populate the database with initial form settings.
+ */
+const populateDBDefault = () => {
+    formSettingsDB.insert({
         database_id: CONFIG_ID,
         value: {
             entries: [
@@ -118,7 +148,7 @@ const insert = () => {
         },
     });
 
-    db.insert({
+    formSettingsDB.insert({
         database_id: SCENE_ID,
         value: {
             entries: [
@@ -157,7 +187,7 @@ const insert = () => {
         },
     });
 
-    db.insert({
+    formSettingsDB.insert({
         database_id: OBJECT_ID,
         value: {
             entries: [
@@ -226,17 +256,21 @@ const insert = () => {
         },
     });
 
-    db.insert({
+    formSettingsDB.insert({
         database_id: TRIAL_ID,
         value: {},
     });
 };
 
-export function initDatabase() {
-    db.count({}, (_err, count) => {
+/**
+ * Initialize the database. If database is corrupted, remove everything and populate it again.
+ */
+function initDatabase() {
+    // console.log(formDB);
+    formSettingsDB.count({}, (_err, count) => {
         if (count !== 4) {
-            db.remove({}, { multi: true }, (_err, _numRemoved) => {
-                insert();
+            formSettingsDB.remove({}, { multi: true }, (_err, _numRemoved) => {
+                populateDBDefault();
             });
         }
     });

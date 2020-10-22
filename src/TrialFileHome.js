@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./App.css";
+import { PlusCircleOutlined, FormOutlined } from "@ant-design/icons";
 
-function TrialFileHome() {
+/**
+ * Home page for generating trial files.
+ */
+export const TrialFileHome = () => {
     return (
         <div className="App">
             <Link className="back-button" to="/">
@@ -10,11 +13,13 @@ function TrialFileHome() {
             </Link>
             <header className="App-header">
                 <p>Generate trial file</p>
-                <div className="horizontal">
-                    <Link className="App-link" to="/createScene">
+                <div>
+                    <Link className="App-link" to="/sceneBuilder">
+                        <PlusCircleOutlined />
                         Create scene
                     </Link>
-                    <Link className="App-link" to="/generateFile">
+                    <Link className="App-link" to="/trialFileBuilder">
+                        <FormOutlined />
                         Generate trial
                     </Link>
                 </div>
@@ -22,5 +27,3 @@ function TrialFileHome() {
         </div>
     );
 }
-
-export default TrialFileHome;
