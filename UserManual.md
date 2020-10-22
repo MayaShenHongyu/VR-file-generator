@@ -103,7 +103,8 @@ And if I type in `8`, the output file will look like this:
         "display": true
     }
     ```
-    `"text"` is the text to be added on to the user input value. For instance, if user inputs "config", then the result will be "config.json". `"display"` denotes whether or not this add-on is displayed to the user in the form.
+    - `"text"` is the text to be added on to the user input value. For instance, if user inputs "config", then the result will be "config.json". This must be a string.
+    - `"display"` denotes whether or not this add-on is displayed to the user in the form. This must be a boolean.
 - (Optional) `"addonBefore"`: An add-on at the start of the input. Same format as `"addonAfter"`.
 
 For example:
