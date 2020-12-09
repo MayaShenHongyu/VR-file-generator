@@ -1,23 +1,25 @@
-## Set up
+# VR File Generator Developer Manual
+
+### User manual
+https://github.com/MayaShenHongyu/VR-file-generator-user-manual
+
+### Set up
 
 Clone this github project directory to local. In the project directory, run `npm install` to install all dependencies.
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run the followings in the terminal:
 
-### `yarn run start`
+#### `yarn run start`
 
-Runs the app in the development mode.<br />
+Runs the app in the development mode. The page will reload if you make edits. You will also see any lint errors in the console.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `yarn run build`
+#### `yarn run build`
 
 Builds the app for production (output executables) to the `dist` folder.<br />
 
-## Project structure
+### Project structure
 
 - `App.js` is the entire React application.
 - `Home.js` is the home page of the app.
