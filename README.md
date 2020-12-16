@@ -29,13 +29,11 @@ There are two kinds of files you can generate: configuration file and trial file
 - This project uses React, a framework usually for web applications. It is used here because it is good for building UI components. See docs: https://reactjs.org/docs/getting-started.html
 - This project uses Ant Design, a UI component library. This is mostly for aesthetic purpose. See docs: https://ant.design/components/
 
-### Set up
-
 ### Files and programs needed
 - Git - Follow the instructions here to install: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git.
 - Your favorite IDE - The author used Visual Sudio Code (https://code.visualstudio.com/download), but you could use any IDE you like.
 
-### Set up instructions
+### Set up
 1. In terminal, go to the directory in which you would like to keep this project. Clone the project to local with `git clone https://github.com/Rice-Perception-and-Action-Lab/MayaShen-configurable-VR-file-generator.git`. Then you will see a new folder with the name of this project. You have successfully cloned this project to local.
 2. Go to the directory you just pulled from git, run `npm install` to install the dependencies.
 3. Use your IDE to open this project. You can start coding now.
