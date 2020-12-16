@@ -1,7 +1,10 @@
-# VR File Generator
+# Configurable VR File Generator User Manual
 
-This file generator generates files for the VR experiment (WinObjVR) based on user requirements. There are two kinds of files you can generate: configuration file and trial file.
+## Purpose
 
+This file generator generates input files for the VR experiment (WinObjVR) based on user specification. It also allows users to configure the format of the generated files (described in detail in the "How this file generator differs from the previous file generator" section). 
+
+There are two kinds of files you can generate: configuration file and trial file.
 - Configuration file: `config.json`
     - This file specifies the configuration for the overall experiment and the name of the trial file, which will have the details for all the trials within the experiment.
 - Trial file: `[trial name].json`
@@ -16,6 +19,30 @@ There are three forms to enable users to generate these files: configuration for
     - A scene consists of multiple objects. The user will specify object number in scene basic information form, and the user will be asked to fill in one object form for each object.
     <img src="/user-manual-images/object_form.png" width="60%" alt="Object form"  />
 
+### How this file generator differs from the previous file generator
+- This file generator allows users to edit the forms (described above) via a JSON file. This means that users can specify the format of the generated files. For instance, you could add a new option "pink" to the "feedbackColor" entry in the "config.JSON" file. In the previous file generator, these forms are hardcoded, which means that you have to change the code in order to change the forms.
+- For trial file generation, this file generator allows users to specify the repeated times for each selected scene, then randomize the scenes. In the previous file generator, you could randomize the selected scenes but they only appear one time.
+
+#### Potential drawbacks
+- This file generator takes up more memory than the previous file generator.
+- To be discovered...
+
+## Status
+
+#### What's been done
+- The program meets all of the given requirements.
+- Professor DeLucia and Miles did quick tests by running the program. The program correctly generated files based on their input to the forms.
+
+#### Problems and issues
+- Systematic testing has not been completed yet.
+
+#### Next steps
+- Do more testing. In particular, we need to test if the programs configures the forms correctly given user specification. 
+- Have more students read the user and developer manuals to identify any areas that need clarification.
+
+## Files and programs needed
+Download the "MayaShenConfigurableVRFileGenerator.zip" file in folder "DeLuciaLab/Undergraduate RAs/MayaShen" in box and unzip it. Install the correct version of the app: "Mac Configurable VR File Generator.dmg" for Mac users, and "Windows Configurable VR File Generator Setup.exe" for Windows users. Then you can click on the app icon to start the app. 
+\* For development, see the list of files and programs needed in the "Set up" section in the developer manual.
 
 ## Usage
 
@@ -71,8 +98,8 @@ In JSON, values must be one of the following data types:
 
 
 
-## Customize forms
-This app allows users to customize two forms: configuration file form and object form. A form can be customized with a JSON array containing form entry definitions. Each definition configures an entry in the form.
+## Edit the forms
+This app allows users to edit two forms: configuration file form and object form. Forms can be configured with a JSON array containing form entry definitions. Each form entry definition configures an entry in the form.
 
 Note: Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output file look like? You should be able to write out the output JSON files by hand.
 
