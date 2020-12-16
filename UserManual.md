@@ -41,7 +41,7 @@ There are three forms to enable users to generate these files: configuration for
 - Have more students read the user and developer manuals to identify any areas that need clarification.
 
 ## Files and programs needed
-Download the "MayaShenConfigurableVRFileGenerator.zip" file in folder "DeLuciaLab/Undergraduate RAs/MayaShen" in box and unzip it. Install the correct version of the app: "Mac Configurable VR File Generator.dmg" for Mac users, and "Windows Configurable VR File Generator Setup.exe" for Windows users. Then you can click on the app icon to start the app. 
+Download the "MayaShenConfigurableVRFileGenerator.zip" file in folder "DeLuciaLab/Undergraduate RAs/MayaShen/MayaVRFileGenerator" in box and unzip it. Install the correct version of the app: "Mac Configurable VR File Generator.dmg" for Mac users, and "Windows Configurable VR File Generator Setup.exe" for Windows users. Then you can click on the app icon to start the app. 
 \* For development, see the list of files and programs needed in the "Set up" section in the developer manual.
 
 ## Usage
