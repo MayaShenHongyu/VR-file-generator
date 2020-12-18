@@ -13,8 +13,9 @@ There are two kinds of files you can generate: configuration file and trial file
 ## Status
 
 #### What's been done
-- The program meets all of the given requirements.
+- All feature requirements have been met.
 - Professor DeLucia and Miles did quick tests by running the program. The program correctly generated files based on their input to the forms.
+- Professor DeLucia and Miles gave feedback on the user manuals.
 
 #### Problems and issues
 - Systematic testing has not been completed yet.
