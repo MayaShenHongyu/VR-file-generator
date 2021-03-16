@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { loadSceneFormSetting, loadObjectFormSetting } from "./database/formSettingsDB";
 import { Modal, Button, Col, Result, message } from "antd";
-import "./layout.css";
-import { DynamicForm } from "./dynamic_form/DynamicForm";
-import { addScene } from "./database/scenesDB";
-import { ScrollPanel } from "./ScrollPanel";
-import { Header } from "./Header";
+import {
+    loadSceneFormSetting,
+    loadObjectFormSetting,
+} from "../database/formSettingsDB";
+import { DynamicForm } from "../dynamic_form/DynamicForm";
+import { addScene } from "../database/scenesDB";
+import { ScrollPanel } from "../ScrollPanel";
+import { Header } from "../Header";
+import "../layout.css";
 
 /**
  * This is the page where user creates a scene.
@@ -31,22 +34,27 @@ export const SceneBuilder = () => {
     }, []);
 
     useEffect(() => {
-        setObjectFormResults([...Array(numObjects).keys()].map((_i) => undefined));
+        setObjectFormResults(
+            [...Array(numObjects).keys()].map((_i) => undefined)
+        );
     }, [numObjects]);
 
     // Check if user has initialized all objects
     useEffect(() => {
         setCanCreateScene(
-            objectFormResults.every(form => form !== undefined)
+            objectFormResults.every((form) => form !== undefined)
         );
     }, [objectFormResults]);
 
     const onFinishSceneForm = (values) => {
         const { numObjects } = values;
         if (numObjects === undefined) {
-            message.error("ERROR: No numObjects field. This field indicates the number of objects to be created.");
+            message.error(
+                "ERROR: No numObjects field. This field indicates the number of objects to be created."
+            );
         }
         setNumObjects(numObjects);
+        delete values["numObjects"];
         setSceneFormResult(values);
         setIsOnObjectPage(true);
     };
@@ -70,7 +78,9 @@ export const SceneBuilder = () => {
         const renderEditObjectButtons = () => {
             return [...Array(numObjects).keys()].map((i) => {
                 const edited = objectFormResults[i] !== undefined;
-                const text = edited ? `Edit object ${i}` : `Create object ${i}`;
+                const text = edited
+                    ? `Edit object ${i + 1}`
+                    : `Create object ${i + 1}`;
                 const onClick = () => {
                     setEditingObjectsIndex(i);
                     setIsEditingObject(true);
@@ -136,7 +146,7 @@ export const SceneBuilder = () => {
                 <div className="medium-margin">
                     <Col offset={6} span={12}>
                         <Button block type="primary" onClick={onCreateScene}>
-                            Create Scene
+                            Save Scene
                         </Button>
                     </Col>
                 </div>
@@ -173,14 +183,11 @@ export const SceneBuilder = () => {
     }
 
     const backButton = isOnObjectPage ? (
-        <Link
-            className="back-button"
-            onClick={() => setIsOnObjectPage(false)}
-        >
+        <Link className="back-button" onClick={() => setIsOnObjectPage(false)}>
             Back
         </Link>
     ) : (
-        <Link className="back-button" to="/generateTrialFileHome">
+        <Link className="back-button" to="/manualInput">
             Back
         </Link>
     );
@@ -190,11 +197,13 @@ export const SceneBuilder = () => {
             {backButton}
             <Header
                 title="Scene builder"
-                description={isOnObjectPage ? "Please finish creating the objects." : "Enter some basic information about this scene."}
+                description={
+                    isOnObjectPage
+                        ? "Please finish creating the objects."
+                        : "Enter some basic information about this scene."
+                }
             />
-            {isOnObjectPage
-                ? renderObjectPage()
-                : renderScenePage()}
+            {isOnObjectPage ? renderObjectPage() : renderScenePage()}
         </ScrollPanel>
     );
 };

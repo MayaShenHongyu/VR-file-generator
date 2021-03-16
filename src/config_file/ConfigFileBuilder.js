@@ -4,12 +4,12 @@ import {
     loadConfigFormSetting,
     loadConfigOutputPath,
     storeConfigOutputPath,
-} from "./database/formSettingsDB";
-import { Result, Modal, Button, Input } from "antd";
-import "./layout.css";
-import { ScrollPanel } from "./ScrollPanel";
-import { Header } from "./Header";
-import { DynamicForm } from "./dynamic_form/DynamicForm";
+} from "../database/formSettingsDB";
+import { Result, message } from "antd";
+import "../layout.css";
+import { ScrollPanel } from "../ScrollPanel";
+import { Header } from "../Header";
+import { DynamicForm } from "../dynamic_form/DynamicForm";
 
 const { dialog } = window.require("electron").remote;
 const fs = window.require("fs");
@@ -20,11 +20,9 @@ const path = window.require("path");
  */
 export const ConfigFileBuilder = () => {
     const [formSetting, setFormSetting] = useState(undefined);
-    const [formResult, setFormResult] = useState(undefined);
     const [outputPath, setOutputPath] = useState(undefined);
     const [finishedGeneratingFile, setFinishedGeneratingFile] = useState(false);
-    const [isGeneratingFile, setIsGeneratingFile] = useState(false);
-    const [fileName, setFileName] = useState("config");
+
 
     useEffect(() => {
         loadConfigFormSetting(setFormSetting);
@@ -32,23 +30,19 @@ export const ConfigFileBuilder = () => {
     }, []);
 
     // On finishing the form
-    const onFinish = (values) => {
+    const onSubmitForm = (values) => {
         console.log("Success:", values);
-        // if (values.trialFile !== undefined) {
-        //     values.trialFile = '~\\..\\Assets\\Trials\\' + values.trialFile;
-        // }
-        setFormResult(values);
-        displayDialogue();
+        selectOutputPath(values);
     };
 
-    const generateFile = () => {
-        const filepath = path.join(outputPath, `${fileName}.json`);
+    const generateFileAtPath = (formValues, outputPath) => {
+        const filepath = path.join(outputPath, "config.json");
         fs.writeFileSync(
             filepath,
-            JSON.stringify(formResult, null, 4),
+            JSON.stringify(formValues, null, 4),
             (error) => {
                 if (error) {
-                    console.log(error);
+                    message.error(String(error));
                     setFinishedGeneratingFile(false);
                     alert(`ERROR: Could not save file to ${filepath}`);
                 }
@@ -56,36 +50,10 @@ export const ConfigFileBuilder = () => {
         );
         // Triggers success message
         setFinishedGeneratingFile(true);
-    };
-
-    // This modal asks users to type in the name of the file to be generated
-    const renderSaveFileAsModal = () => {
-        const submitButton = (
-            <Button key="submit" onClick={generateFile}>
-                Save
-            </Button>
-        );
-        const onValueChange = ({ target: { value } }) => setFileName(value);
-        return (
-            <Modal
-                centered
-                visible={isGeneratingFile}
-                title="Save file as"
-                maskClosable={false}
-                onCancel={() => setIsGeneratingFile(false)}
-                footer={[submitButton]}
-            >
-                <Input
-                    value={fileName}
-                    onChange={onValueChange}
-                    addonAfter=".json"
-                />
-            </Modal>
-        );
-    };
+    }
 
     // This dialogue asks user to select a directory to generate the file in
-    const displayDialogue = () => {
+    const selectOutputPath = (formValues) => {
         dialog
             .showOpenDialog({
                 properties: ["openDirectory"],
@@ -96,18 +64,18 @@ export const ConfigFileBuilder = () => {
                 if (!response.canceled) {
                     // Handle fully qualified file name
                     const path = response.filePaths[0];
-                    // This is used for display in the success message
+                    // This is used to display in the success message
                     setOutputPath(path);
                     // Store path as default path into the database
                     storeConfigOutputPath(path);
-                    // This will trigger the Save File As Modal to be visible
-                    setIsGeneratingFile(true);
+                    // Generate the file at the given path
+                    generateFileAtPath(formValues, path);
                 } else {
                     throw new Error("No directory selected");
                 }
             })
             .catch((err) => {
-                console.log(err);
+                message.error(String(err));
             });
     };
 
@@ -117,7 +85,7 @@ export const ConfigFileBuilder = () => {
                 <Result
                     status="success"
                     title="Successfully generated configuration file!"
-                    subTitle={`You can find the file at ${outputPath}`}
+                    subTitle={`You can find config.json at ${outputPath}`}
                     extra={[
                         <Link key={"back"} className="App-link" to="/">
                             Back to home page
@@ -138,11 +106,10 @@ export const ConfigFileBuilder = () => {
             />
             <DynamicForm
                 formEntryDefinitions={formSetting}
-                onSubmit={onFinish}
+                onSubmit={onSubmitForm}
                 submitButtonText="Generate configuration file"
                 labelWidth={8}
             />
-            {renderSaveFileAsModal()}
         </ScrollPanel>
     );
 };

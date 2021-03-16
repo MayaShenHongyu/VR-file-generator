@@ -1,12 +1,11 @@
-
 // Parse a form setting file and return error messages if issues are found.
 export const parseFormSetting = (entries) => {
     const errorMessages = [];
-    const keys = entries.map(entry => entry.key);
+    const keys = entries.map((entry) => entry.key);
     entries.forEach((entry, index) => {
         const messages = parseEntryDefinition(entry);
         if (keys.indexOf(entry.key) !== index) {
-            messages.push(`${entry.key} is a duplicate key.`)
+            messages.push(`${entry.key} is a duplicate key.`);
         }
         if (messages.length !== 0) {
             errorMessages.push({ index, messages });
@@ -30,7 +29,7 @@ const parseEntryDefinition = (entryDefinition) => {
     }
 
     if (tooltip !== undefined && typeof tooltip !== "string") {
-        errorMessages.push("`tooltip` must be a string.")
+        errorMessages.push("`tooltip` must be a string.");
     }
 
     switch (type) {
@@ -73,19 +72,22 @@ const parseText = (textEntry, errorMessages) => {
         errorMessages.push("`defaultValue` of a text entry should be a string");
     }
 
-
     if (addonAfter !== undefined) {
         const { text, display } = addonAfter;
         if (typeof text !== "string" || typeof display !== "boolean") {
-            errorMessages.push("`addOnAfter` should be an object with format: {\"text\": \"text to add on\", \"display\": true/false} ");
-        } 
+            errorMessages.push(
+                '`addOnAfter` should be an object with format: {"text": "text to add on", "display": true/false} '
+            );
+        }
     }
 
     if (addonBefore !== undefined) {
         const { text, display } = addonBefore;
         if (typeof text !== "string" || typeof display !== "boolean") {
-            errorMessages.push("`addOnBefore` should be an object with format: {\"text\": \"text to add on\", \"display\": true/false} ");
-        } 
+            errorMessages.push(
+                '`addOnBefore` should be an object with format: {"text": "text to add on", "display": true/false} '
+            );
+        }
     }
 };
 
@@ -152,7 +154,7 @@ const parseList = (listEntry, errorMessages) => {
         );
     }
 
-    const checkIfDefaultListOnlyContainsType = (type) => {
+    const checkIfDefaultValueOnlyContainsType = (type) => {
         if (defaultValue !== undefined) {
             const isValid = Array.from(defaultValue).every(
                 (val) => typeof val === type
@@ -167,10 +169,10 @@ const parseList = (listEntry, errorMessages) => {
 
     switch (itemType) {
         case "number":
-            checkIfDefaultListOnlyContainsType("number");
+            checkIfDefaultValueOnlyContainsType("number");
             break;
         case "text":
-            checkIfDefaultListOnlyContainsType("string");
+            checkIfDefaultValueOnlyContainsType("string");
             break;
         default:
             errorMessages.push(

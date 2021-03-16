@@ -1,54 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import {
-    loadConfigFormSetting,
-    storeConfigFormSetting,
-    loadObjectFormSetting,
-    storeObjectFormSetting,
-} from "./database/formSettingsDB";
-import { Tabs, Input, Button, Col, Row, message } from "antd";
-import "./layout.css";
-import { parseFormSetting } from "./form_config_parser/parser";
-import { ScrollPanel } from "./ScrollPanel";
-import { Header } from "./Header";
+import { Input, Button, Col, Row, message } from "antd";
+import "../layout.css";
+import { parseFormSetting } from "../util/formSettingJSONParser";
 
 const { dialog } = window.require("electron").remote;
 const fs = window.require("fs");
 
 /**
- * Form settings page for users to customize configuration file form and object form.
+ * A single form setting editor that allows you to import a JSON file.
  */
-export const FormSettingsPage = () => {
-    return (
-        <ScrollPanel>
-            <Link className="back-button" to="/">
-                Back
-            </Link>
-            <Header title="Form Settings" />
-            <div style={{ margin: "0 10vw" }}>
-                <Tabs defaultActiveKey="1">
-                    <Tabs.TabPane tab="Configuration file form" key="1">
-                        <FormSetting
-                            loadFormSetting={loadConfigFormSetting}
-                            storeFormSetting={storeConfigFormSetting}
-                        />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Object form" key="2">
-                        <FormSetting
-                            loadFormSetting={loadObjectFormSetting}
-                            storeFormSetting={storeObjectFormSetting}
-                        />
-                    </Tabs.TabPane>
-                </Tabs>
-            </div>
-        </ScrollPanel>
-    );
-};
-
-/**
- * A single form setting importer.
- */
-const FormSetting = ({ loadFormSetting, storeFormSetting }) => {
+export const FormSettingEditor = ({ loadFormSetting, storeFormSetting }) => {
     const [formSetting, setFormSetting] = useState([]);
     const [generalMessage, setGeneralMessage] = useState(undefined); // General message indicating whether there is a problem with the imported form setting
     const [entryErrorMessages, setEntryErrorMessages] = useState(undefined); // Error messages for each Form Entry Definition
@@ -138,10 +99,12 @@ const FormSetting = ({ loadFormSetting, storeFormSetting }) => {
         const visibility = unsaved ? "visible" : "hidden";
         const onClick = () => {
             setUnsaved(false);
-            if (canSave) { // `Save settings`
+            if (canSave) {
+                // `Save settings`
                 storeFormSetting(formSetting);
                 message.success("Successfully saved.");
-            } else { // `Cancel`
+            } else {
+                // `Cancel`
                 loadFormSetting(setFormSetting);
                 setGeneralMessage(undefined);
                 setEntryErrorMessages(undefined);

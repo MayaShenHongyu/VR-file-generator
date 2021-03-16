@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { loadScenes, storeScenes } from "./database/scenesDB";
+import { loadScenes, storeScenes } from "../database/scenesDB";
 import {
     loadTrialOutputPath,
     storeTrialOutputPath,
-} from "./database/formSettingsDB";
-import { Header } from "./Header";
+} from "../database/formSettingsDB";
+import { Header } from "../Header";
 import {
     Form,
     Input,
@@ -15,9 +15,9 @@ import {
     InputNumber,
     Popconfirm,
 } from "antd";
-import "./layout.css";
-import "./CreateTrialPage.css";
-import { ScrollPanel } from "./ScrollPanel";
+import "../layout.css";
+import "./TrialFileBuilder.css";
+import { ScrollPanel } from "../ScrollPanel";
 import { DeleteOutlined } from "@ant-design/icons";
 
 const { dialog } = window.require("electron").remote;
@@ -25,10 +25,11 @@ const fs = window.require("fs");
 const path = window.require("path");
 
 // Helper method for randomizing the elements in a list
-const randomizeList = (list) => list
-                                .map((a) => ({ sort: Math.random(), value: a }))
-                                .sort((a, b) => a.sort - b.sort)
-                                .map((a) => a.value);
+const randomizeList = (list) =>
+    list
+        .map((a) => ({ sort: Math.random(), value: a }))
+        .sort((a, b) => a.sort - b.sort)
+        .map((a) => a.value);
 
 /**
  * Page for users to generated trial files by selecting avaliable scenes.
@@ -52,9 +53,9 @@ export const TrialFileBuilder = () => {
     useEffect(() => {
         if (availableScenes !== undefined) {
             // console.log(`cleanup: ${availableScenes.map(s => s.sceneName)}`)
-            storeScenes([...availableScenes, ...selectedScenes])
+            storeScenes([...availableScenes, ...selectedScenes]);
         }
-    }, [availableScenes, selectedScenes])
+    }, [availableScenes, selectedScenes]);
 
     // Select the scene at a specific index in availableScenes
     const selectScene = (index) => {
@@ -92,22 +93,22 @@ export const TrialFileBuilder = () => {
         // console.log(`Render available scenes: ${availableScenes.map(s => s.sceneName)}`);
         return availableScenes.map((scene, index) => {
             return (
-                    <div key={index} className="available-scene">
-                        <Button
-                            className="available-scene-button"
-                            onClick={() => selectScene(index)}
-                        >
-                            {scene.sceneName ?? `Scene ${index + 1}`}
-                        </Button>
-                        <Popconfirm
-                            title="Are you sure to delete this scene?"
-                            onConfirm={() => deleteScene(index)}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button href="#" icon={<DeleteOutlined />} />
-                        </Popconfirm>
-                    </div>
+                <div key={index} className="available-scene">
+                    <Button
+                        className="available-scene-button"
+                        onClick={() => selectScene(index)}
+                    >
+                        {scene.sceneName ?? `Scene ${index + 1}`}
+                    </Button>
+                    <Popconfirm
+                        title="Are you sure to delete this scene?"
+                        onConfirm={() => deleteScene(index)}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button href="#" icon={<DeleteOutlined />} />
+                    </Popconfirm>
+                </div>
             );
         });
     };
@@ -138,10 +139,12 @@ export const TrialFileBuilder = () => {
                 []
             );
             // Randomize the scenes, add `trialNum` and `trialName` to each scene.
-            const processedTrials = randomizeList(
-                trials
-            ).map((scene, i) => {
-                const trial = { trialNum: i + 1, trialName: scene.sceneName ?? `Scene ${i + 1}`, ...scene };
+            const processedTrials = randomizeList(trials).map((scene, i) => {
+                const trial = {
+                    trialNum: i + 1,
+                    trialName: scene.sceneName ?? `Scene ${i + 1}`,
+                    ...scene,
+                };
                 delete trial.sceneName;
                 return trial;
             });
@@ -156,14 +159,14 @@ export const TrialFileBuilder = () => {
             .showOpenDialog({
                 properties: ["openDirectory"],
                 defaultPath: outputPath,
-                title: "Save file at",
+                title: "Save file at (please select folder/path)",
             })
             .then((response) => {
                 if (!response.canceled) {
                     // Handle fully qualified file name
                     const path = response.filePaths[0];
                     setOutputPath(path);
-                    // Store this path into the database so that next time this dialog will automatically navigate to that location 
+                    // Store this path into the database so that next time this dialog will automatically navigate to that location
                     storeTrialOutputPath(path);
                     return path;
                 } else {
@@ -210,7 +213,7 @@ export const TrialFileBuilder = () => {
 
     return (
         <ScrollPanel>
-            <Link className="back-button" to="/generateTrialFileHome">
+            <Link className="back-button" to="/manualInput">
                 Back
             </Link>
             <Header

@@ -1,96 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Form, Button, Spin, message } from "antd";
 import { DynamicFormEntry } from "./DynamicFormEntry";
 import "../layout.css";
-
-// const FormEntry = ({ val }) => {
-//     const renderInputList = (key, size, itemType) => {
-//         const inputItem = (index, type, style) => {
-//             if (type === "number") {
-//                 return <InputNumber key={index} style={style} />;
-//             } else if (type === "text") {
-//                 return <Input key={index} style={style} />;
-//             }
-//         };
-
-//         const itemWidth = 100 / size;
-//         const formItems = [...Array(size)].map((_, i) => {
-//             return (
-//                 <Form.Item key={i} noStyle name={[key, i]}>
-//                     {inputItem(i, itemType, { width: `${String(itemWidth)}%` })}
-//                 </Form.Item>
-//             );
-//         });
-
-//         return <Input.Group>{formItems}</Input.Group>;
-//     };
-
-//     const renderSelect = (options) => {
-//         return (
-//             <Select>
-//                 {options &&
-//                     Object.entries(options).map(([key, val], index) => (
-//                         <Select.Option key={index} value={key}>
-//                             {val}
-//                         </Select.Option>
-//                     ))}
-//             </Select>
-//         );
-//     };
-
-//     const getAdditionalRules = () => {
-//         const checkValid = (e) => e !== null && e !== undefined;
-//         const validationRule = val.type !== "list"
-//             ? { required: true, message: "Cannot be empty" }
-//             : {
-//                   validator: (_, value) =>
-//                       value && value.length === val.listSize && value.every(checkValid)
-//                           ? Promise.resolve()
-//                           : Promise.reject("All entries must be filled"),
-//               };
-//         const maybeSwitchAddOn = val.type === "switch" ? { valuePropName: "checked" } : {};
-//         return { rules: [validationRule], ...maybeSwitchAddOn };
-//     }
-
-//     const maybeSwitchAddOn =
-//         val.type === "switch" ? { valuePropName: "checked" } : undefined;
-
-//     const input =
-//         val.type === "number" ? (
-//             <InputNumber />
-//         ) : val.type === "switch" ? (
-//             <Switch />
-//         ) : val.type === "text" ? (
-//             <Input addonAfter={val.addonAfter} />
-//         ) : val.type === "select" ? (
-//             renderSelect(val.options)
-//         ) : val.type === "list" ? (
-//             renderInputList(val.key, val.listSize, val.itemType)
-//         ) : undefined;
-
-//     const validationRule = val.type !== "list"
-//             ? { required: true, message: "Cannot be empty" }
-//             : {
-//                   validator: (_, value) =>
-//                       value && value.length === val.listSize
-//                           ? Promise.resolve()
-//                           : Promise.reject("All entries must be filled"),
-//               };
-
-//     return (
-//         <Form.Item
-//             label={val.label}
-//             name={val.key}
-//             tooltip={val.tooltip}
-//             // rules={validationRule && [validationRule]}
-//             // {...maybeSwitchAddOn}
-//             {...getAdditionalRules()}
-//         >
-//             {input}
-//         </Form.Item>
-//     );
-// };
-
 
 /**
  * DynamicForm is the form configured by a form setting, which is an array of Form Entry Definitions.
@@ -102,39 +13,20 @@ export const DynamicForm = ({
     submitButtonText,
     initialValues,
     labelWidth = 7,
-    inputWidth = 12
+    inputWidth = 12,
 }) => {
     const [form] = Form.useForm();
-    // const [addOnProcessors, setAddOnProcessors] = useState({});
 
+    /**
+     * Some text entires have add-ons (e.g. the `.json` add-on in `File name: *some user input*.json`).
+     * Need to extract them and attach them to their corresponding entries after user submits form.
+     */
     useEffect(() => {
         if (formEntryDefinitions !== undefined) {
-            /**
-             * Some text entires have add-ons (e.g. the `.json` add-on in `File name: *some user input*.json`).
-             * Need to extract them and attach them to their corresponding entries after user submits form.
-             */
-            // const addOnProcessors = formEntryDefinitions
-            //     .map(val => {
-            //         const { key, addonAfter, addonBefore } = val;
-            //         const after = addonAfter ? addonAfter.text : "";
-            //         const before = addonBefore ? addonBefore.text : "";
-            //         return { [key]: (result) => before + result + after };
-            //     });
-            // setAddOnProcessors(Object.assign({}, ...addOnProcessors));
-            // const addOnProcessors = formEntryDefinitions
-            //     .filter(val => val.addonAfter || val.addonBefore)
-            //     .map(val => {
-            //         const { key, addonAfter, addonBefore } = val;
-            //         const after = addonAfter ? addonAfter.text : "";
-            //         const before = addonBefore ? addonBefore.text : "";
-            //         return [key, (result) => before + result + after] ;
-            //     });
-            // setAddOnProcessors(Object.fromEntries(addOnProcessors));
-
             if (initialValues) {
                 form.setFieldsValue(initialValues);
             } else {
-                // Extract default values of the entries to initialize the form
+                // Extract default values of the entries to initialize the form.
                 const defaultValues = formEntryDefinitions.map((val) => ({
                     [val.key]: val.defaultValue,
                 }));
@@ -145,12 +37,12 @@ export const DynamicForm = ({
 
     // If form entry definitions is undefined, we are waiting form them to come through from the database.
     if (formEntryDefinitions === undefined) {
-        return <div className="center" ><Spin size="large" /></div>;
+        return (
+            <div className="center">
+                <Spin size="large" />
+            </div>
+        );
     }
-
-    // const getFormEntry = (val, index) => {
-    //     return <DynamicFormEntry key={index} val={val} />;
-    // };
 
     const onFinishFailed = (errorInfo) => {
         console.log("Failed:", errorInfo);
@@ -158,31 +50,26 @@ export const DynamicForm = ({
     };
 
     const onFinish = (values) => {
-        // const processedEntries = Object.entries(values).map(([key, val]) => ({
-        //     // [key]: addOns[key] ? val + addOns[key] : val,
-        //     [key]: addOns[key](val),
-        // }));
-        // onSubmit(Object.assign({}, ...processedEntries));
-        const processedResult = formEntryDefinitions
-                        .reduce((acc, entry) => {
-                            const { key, type } = entry;
-                            let processedVal = values[key];
-                            if (type === "text") {
-                                const { addonAfter, addonBefore } = entry;
-                                const after = addonAfter !== undefined ? addonAfter.text : "";
-                                const before = addonBefore !== undefined ? addonBefore.text : "";
-                                processedVal = before + processedVal + after;
-                            }
+        // Add "addonAfter" and "addonBefore" to text results.
+        const processedResult = formEntryDefinitions.reduce((acc, entry) => {
+            const { key, type } = entry;
+            let processedVal = values[key];
+            if (type === "text") {
+                if (processedVal === undefined) {
+                    processedVal = "";
+                } else {
+                    const { addonAfter, addonBefore } = entry;
+                    const after =
+                        addonAfter !== undefined ? addonAfter.text : "";
+                    const before =
+                        addonBefore !== undefined ? addonBefore.text : "";
+                    processedVal = before + processedVal + after;
+                }
+            }
 
-                            return { ...acc, [key]: processedVal };
-                        }, {});
+            return { ...acc, [key]: processedVal };
+        }, {});
         onSubmit(processedResult);
-        // const processedResult = Object.fromEntries(
-        //     Object.entries(values).map(
-        //       ([key, val]) => [key, key in addOnProcessors ? addOnProcessors[key](val) : val]
-        //     )
-        //   );
-        // onSubmit(values);
     };
 
     return (
@@ -195,7 +82,9 @@ export const DynamicForm = ({
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
         >
-            {formEntryDefinitions.map((val, index) => <DynamicFormEntry key={index} val={val} />)}
+            {formEntryDefinitions.map((val, index) => (
+                <DynamicFormEntry key={index} val={val} />
+            ))}
             <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
                 <Button type="primary" htmlType="submit" block>
                     {submitButtonText}

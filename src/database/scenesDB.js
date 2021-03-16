@@ -6,7 +6,6 @@ initDatabase();
 
 const SCENES_ID = "scenes";
 
-
 // function printScenes(msg) {
 //     setTimeout(() => sceneDB.findOne({ database_id: SCENES_ID }, (_err, doc) => {
 //         console.log(`${msg}: ${doc.scenes.map(s => s.sceneName)}`);
@@ -15,7 +14,7 @@ const SCENES_ID = "scenes";
 
 /**
  * Add a single scene
- * @param {Object} newScene 
+ * @param {Object} newScene
  */
 export const addScene = (newScene) => {
     // console.log("Add scene");
@@ -33,7 +32,7 @@ export const addScene = (newScene) => {
 
 /**
  * Retreive scenes in database.
- * @param {(Array<Object>) => void} callback 
+ * @param {(Array<Object>) => void} callback
  */
 export const loadScenes = (callback) => {
     sceneDB.findOne({ database_id: SCENES_ID }, (_err, doc) => {
@@ -43,7 +42,7 @@ export const loadScenes = (callback) => {
 
 /**
  * Update the entire database.
- * @param {Array<Object>} scenes 
+ * @param {Array<Object>} scenes
  */
 export const storeScenes = (scenes) => {
     sceneDB.update(
@@ -65,7 +64,7 @@ function initDatabase() {
             sceneDB.remove({}, { multi: true }, (_err, _numRemoved) => {
                 sceneDB.insert({
                     database_id: SCENES_ID,
-                    scenes: []
+                    scenes: [],
                 });
             });
         }

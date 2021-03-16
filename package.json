@@ -1,8 +1,8 @@
 {
-    "name": "vr-file-generator",
+    "name": "configurable-vr-file-generator",
     "version": "0.1.0",
     "private": true,
-    "description": "VR file generator",
+    "description": "Configurable VR file generator",
     "author": "Maya Shen",
     "main": "public/electron.js",
     "build": {
@@ -19,6 +19,7 @@
         "antd": "^4.7.0",
         "bootstrap": "^4.5.2",
         "cross-env": "^7.0.2",
+        "csv": "^5.3.2",
         "electron-is-dev": "^1.2.0",
         "electron-store": "^6.0.0",
         "nedb": "^1.8.0",
@@ -33,7 +34,7 @@
         "react-build": "react-scripts build",
         "react-test": "react-scripts test",
         "react-eject": "react-scripts eject",
-        "electron-build": "electron-builder",
+        "electron-build": "electron-builder --win",
         "build": "npm run react-build && npm run electron-build",
         "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\""
     },

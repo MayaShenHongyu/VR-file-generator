@@ -5,14 +5,14 @@ import { PlusCircleOutlined, FormOutlined } from "@ant-design/icons";
 /**
  * Home page for generating trial files.
  */
-export const TrialFileHome = () => {
+export const TrialFileManualInput = () => {
     return (
         <div className="App">
-            <Link className="back-button" to="/">
+            <Link className="back-button" to="/generateTrialFileHome">
                 Back
             </Link>
             <header className="App-header">
-                <p>Generate trial file</p>
+                <p>Generate trial file by manual input</p>
                 <div>
                     <Link className="App-link" to="/sceneBuilder">
                         <PlusCircleOutlined />
@@ -26,4 +26,4 @@ export const TrialFileHome = () => {
             </header>
         </div>
     );
-}
+};

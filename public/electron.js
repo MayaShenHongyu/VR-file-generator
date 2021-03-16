@@ -1,5 +1,5 @@
 const { app, BrowserWindow } = require("electron");
-const path = require('path');
+const path = require("path");
 const isDev = require("electron-is-dev");
 var Datastore = require("nedb");
 
@@ -18,9 +18,8 @@ function createWindow() {
     win.loadURL(
         isDev
             ? "http://localhost:3000"
-            : `file://${path.join(__dirname, '../build/index.html')}`
+            : `file://${path.join(__dirname, "../build/index.html")}`
     );
-
 
     // Open the DevTools.
     if (isDev) {
@@ -52,15 +51,21 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-var userData = app.getPath('userData');
-// console.log(userData);
-// console.log(path.join(userData, "/db/form_config.db"))
+
+// var userData = app.getPath('userData');
+// exports.formConfig = new Datastore({
+//     filename: path.join(userData, "/db/form_config.db"),
+//     autoload: true,
+// });
+// exports.scenes = new Datastore({
+//     filename: path.join(userData, "/db/scenes.db"),
+//     autoload: true,
+// });
 exports.formConfig = new Datastore({
-    filename: path.join(userData, "/db/form_config.db"),
+    filename: path.join(__dirname, "../db/form_config.db"),
     autoload: true,
 });
 exports.scenes = new Datastore({
-    filename: path.join(userData, "/db/scenes.db"),
+    filename: path.join(__dirname, "../db/scenes.db"),
     autoload: true,
 });
-
