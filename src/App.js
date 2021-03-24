@@ -5,7 +5,7 @@ import { ConfigFileBuilder } from "./config_file/ConfigFileBuilder";
 import { SceneBuilder } from "./trial_file/SceneBuilder";
 import { TrialFileBuilder } from "./trial_file/TrialFileBuilder";
 import { TrialFileHome } from "./trial_file/TrialFileHome";
-import { FormSettingsPage } from "./form_settings/FormSettings";
+import { FormSettingsPage } from "./form_settings/FormSettingsPage";
 import { CSVTrialFileConverter } from "./trial_file/CSVTrialFileConverter";
 import { TrialFileManualInput } from "./trial_file/TrialFileManualInputHome";
 import "antd/dist/antd.css";

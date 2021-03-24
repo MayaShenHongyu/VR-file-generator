@@ -51,21 +51,12 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-
-// var userData = app.getPath('userData');
-// exports.formConfig = new Datastore({
-//     filename: path.join(userData, "/db/form_config.db"),
-//     autoload: true,
-// });
-// exports.scenes = new Datastore({
-//     filename: path.join(userData, "/db/scenes.db"),
-//     autoload: true,
-// });
+var userData = app.getPath('userData');
 exports.formConfig = new Datastore({
-    filename: path.join(__dirname, "../db/form_config.db"),
+    filename: path.join(userData, "/db/form_config.db"),
     autoload: true,
 });
 exports.scenes = new Datastore({
-    filename: path.join(__dirname, "../db/scenes.db"),
+    filename: path.join(userData, "/db/scenes.db"),
     autoload: true,
 });

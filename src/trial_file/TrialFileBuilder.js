@@ -14,22 +14,17 @@ import {
     message,
     InputNumber,
     Popconfirm,
+    Switch
 } from "antd";
 import "../layout.css";
 import "./TrialFileBuilder.css";
 import { ScrollPanel } from "../ScrollPanel";
 import { DeleteOutlined } from "@ant-design/icons";
+import { randomizeList } from "../util/functions";
 
 const { dialog } = window.require("electron").remote;
 const fs = window.require("fs");
 const path = window.require("path");
-
-// Helper method for randomizing the elements in a list
-const randomizeList = (list) =>
-    list
-        .map((a) => ({ sort: Math.random(), value: a }))
-        .sort((a, b) => a.sort - b.sort)
-        .map((a) => a.value);
 
 /**
  * Page for users to generated trial files by selecting avaliable scenes.
@@ -128,18 +123,41 @@ export const TrialFileBuilder = () => {
         });
     };
 
-    const onSubmit = (values) => {
+    const onClickGenerateTrialFile = (values) => {
         if (selectedScenes.length === 0) {
             message.error("Please select at least one scene");
         } else {
-            const { fileName, repeatedTimes } = values;
+            // const { fileName, repeatedTimes } = values;
+            // // Repeat the scenes for `repeatedTimes` times
+            // const trials = [...Array(repeatedTimes).keys()].reduce(
+            //     (list, _i) => list.concat(selectedScenes),
+            //     []
+            // );
+            // // Randomize the scenes, add `trialNum` and `trialName` to each scene.
+            // const processedTrials = randomizeList(trials).map((scene, i) => {
+            //     const trial = {
+            //         trialNum: i + 1,
+            //         trialName: scene.sceneName ?? `Scene ${i + 1}`,
+            //         ...scene,
+            //     };
+            //     delete trial.sceneName;
+            //     return trial;
+            // });
+            // const trileFile = { trials: processedTrials };
+            // generateTrialFile(trileFile, fileName);
+
+            const { fileName, repeatedTimes, randomize } = values;
+
             // Repeat the scenes for `repeatedTimes` times
-            const trials = [...Array(repeatedTimes).keys()].reduce(
+            let trials = [...Array(repeatedTimes).keys()].reduce(
                 (list, _i) => list.concat(selectedScenes),
                 []
             );
+            if (randomize) {
+                trials = randomizeList(trials);
+            }
             // Randomize the scenes, add `trialNum` and `trialName` to each scene.
-            const processedTrials = randomizeList(trials).map((scene, i) => {
+            const processedTrials = trials.map((scene, i) => {
                 const trial = {
                     trialNum: i + 1,
                     trialName: scene.sceneName ?? `Scene ${i + 1}`,
@@ -148,8 +166,8 @@ export const TrialFileBuilder = () => {
                 delete trial.sceneName;
                 return trial;
             });
-            const trileFile = { trials: processedTrials };
-            generateTrialFile(trileFile, fileName);
+            const trialFile = { trials: processedTrials };
+            generateTrialFile(trialFile, fileName);
         }
     };
 
@@ -234,7 +252,7 @@ export const TrialFileBuilder = () => {
                 </div>
                 <div className="form-container">
                     <Form
-                        onFinish={onSubmit}
+                        onFinish={onClickGenerateTrialFile}
                         labelCol={{ span: 8 }}
                         wrapperCol={{ span: 8 }}
                     >
@@ -257,6 +275,15 @@ export const TrialFileBuilder = () => {
                             rules={[{ required: true }]}
                         >
                             <InputNumber />
+                        </Form.Item>
+                        <Form.Item
+                            label="Randomize scenes"
+                            name="randomize"
+                            initialValue={true}
+                            rules={[{ required: true }]}
+                            valuePropName="checked"
+                        >
+                            <Switch />
                         </Form.Item>
                         <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
                             <Button block type="primary" htmlType="submit">

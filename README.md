@@ -66,20 +66,36 @@ Format all files with Prettier. Prettier is a code formatting tool. See docs: ht
 
 -   Directory `public` contains static assets used in this project. You shouldn’t need to make any changes in this directory in most cases.
     -   `electron.js` is the entry point for this Electron project.
--   Directory `db` contains the databases. You shouldn't need to make any changes in this directory.
-    -   `form_config.db` is the database for form settings.
-    -   `scenes.db` is the database for scenes.
 -   Directory `src` contains the main code for this project. In most cases, changes should be made in here.
+    -   `index.js` React entry point.
     -   `App.js` is the entire React application.
+    -   `Header.js` is the header component used in other components.
+    -   `ScrollPanel.js` is a scroll panel component used in other components.
     -   `Home.js` is the home page of the app.
-    -   `ConfigFileBuilder.js` is the VR configuration file builder.
-    -   `TrialFileHome.js` is the home page for generating trial files.
-    -   `SceneBuilder.js` is the page where user creates a scene.
-    -   `TrialFileBuilder.js` is the trial file builder. User selects from available scenes to build trial files.
-    -   Directory `database` contains APIs to manage the database:
-        -   `formSettingsDB.js` contains functions to manage `form_config.db`.
-        -   `scenesDB.js` contains functions to manage `scenes.db`.
-    -   Directory `dynamic_form` contains `DynamicForm`, a React component that reads in a form setting and displays the form accordingly.
+    - Directory `config_file`:
+        -   `ConfigFileBuilder.js` is the VR configuration file builder.
+    - Directory `trial_file`:
+        -   `TrialFileHome.js` is the home page for generating trial files.
+        -   `TrialFileManualInputHome.js` is the home page for generating trial files with manual input.
+            -   `SceneBuilder.js` is the page where user creates a scene.
+            -   `TrialFileBuilder.js` is the trial file builder. User selects from available scenes to build trial files.
+        -   `CSVTrialFileConverter.js` is the page where user converts a CSV file to a JSON trial file.
+    - Directory `form_settings`:
+        -   `FormSettingsPage.js` is the page where user edits the VR Configuration/Object form settings.
+        -   `FormSettingEditor.js` allows users to import new VR Configuration/Object form settings. A sub-component of `FormSettingsPage`.
+        -   `ObjectTypesEditor.js` allows users to add/delete object types. A sub-component of `FormSettingsPage`.
+    -   Directory `dynamic_form` contains `DynamicForm`, a component that reads in a form setting and displays the form accordingly.
         -   `DynamicForm.js` is the `DynamicForm` component.
         -   `DynamicFormEntry.js` is a sub-component of `DynamicForm`.
+    -   Directory `util` contains util functions used in other files.
+        -   `formSettingJSONParser.js` for parsing newly imported form setting files in JSON format.
+        -   `trialFileCSVParser.js` for parsing trial files in CSV format.
+        -   `functions.js` contains other util functions.
+    -   Directory `database` contains APIs to manage the database.
+        -   `formSettingsDB.js` contains functions to manage the form setting database `form_config.db`.
+        -   `scenesDB.js` contains functions to manage the scene database `scenes.db`.
+        -   When the application runs for the first time, `form_config.db` and `scenes.db` are set up in a `db` directory the user's app data folder:
+            -   For Windows, this app data folder is usually at `C:\Users\<you>\AppData\Local\configurable-vr-file-generator`.
+            -   For Mac, this is usually `~/Library/Application Support/configurable-vr-file-generator`.
+    
     -   The `xxx.css` files are CSS styles defined for the components in `xxx.js` files. For instance, `Home.css` contains styles used in the `Home.js` component. `Home.js` needs to import `Home.css` via `import "./Home.css"` to use the styles.

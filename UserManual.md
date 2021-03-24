@@ -13,13 +13,13 @@ There are two kinds of files you can generate: configuration file and trial file
 
 There are three forms to enable users to generate these files: configuration form, scene basic information form, and object form.
 
--   Configuration file form: generate configuration file
+-   Configuration File Form: generate configuration file
     <img src="/user-manual-images/configuration_file_builder.png" alt="Config builder" width="60%" />
--   Scene basic information form: set up basic information of a scene
+-   Scene Basic Information Form: set up basic information of a scene
     <img src="/user-manual-images/scene_builder_1.png" alt="Scene builder 1" width="60%" />
--   Object form: specify the parameters of an object -- object type (e.g. car), velocity, start position, end position, etc.
+-   Object Form: specify the parameters of an object -- object type (e.g. car), velocity, start position, end position, etc.
     -   A scene consists of multiple objects. The user will specify object number in scene basic information form, and the user will be asked to fill in one object form for each object.
-        <img src="/user-manual-images/object_form.png" width="60%" alt="Object form"  />
+        <img src="/user-manual-images/scene_builder_3.png" width="60%" alt="Object form"  />
 
 ### How this file generator differs from the previous file generator
 
@@ -62,21 +62,107 @@ Click on the "Generate configuration" button on the home page, and you will see 
 
 ### Generate trial files
 
-Click on the "Generate trial" button on the home page to access the menu page of trial file genertor.
+There are two ways users can generate trial files: manual input and import from CSV files. Click on the "Generate trial file" button on the home page and you will see the two options.
+
+<img src="/user-manual-images/trial_file_home.png" alt="Generate trial file" width="60%" />
+
+
+#### Manual input
+
+Click on the "Manual input" button to access the menu page of generating trial files by manual input.
 
 Scenes are building blocks of trials, so we must have a pool of available scenes before we can generate a trial file.
-To create a scene, click on the "Create scene" button and complete the forms. Each scene consists of >= 1 objects.
+
+To create a scene, click on the "Create scene" button and complete the forms. Each scene consists of >= 1 objects. This is the Scene basic information form, where you input some of the basic attributes of the scene.
 
 <img src="/user-manual-images/scene_builder_1.png" alt="Scene builder 1" width="60%" />
+
+Then you will see a page where you can define each Object.
 <img src="/user-manual-images/scene_builder_2.png" alt="Scene builder 1" width="60%" />
 
-After creating scenes, click on the "Generate trial" button, where you will see all scenes avaliable in the database.
+After clicking on one, you can see the Object Form where you define the attributed of an object.
+<img src="/user-manual-images/scene_builder_3.png" alt="Scene builder 3" width="60%" />
+
+After finishing creating scenes, you will be send back to the Manal Input home page. Click on the "Generate trial" button, then you will see all scenes avaliable in the database.
 
 <img src="/user-manual-images/trial_builder.png" alt="Trial builder" width="60%" />
 
-Note that you must enter "Repeated times", which is the number of times each selected scene is repeated in the trial. Scenes are randomized in the generated trial file.
+Note that you need to input the file name, repeated times, and whether or not to randomize the scenes before you click on 'Generate trial file'.
 
-## Understanding JSON
+#### Import from CSV
+
+Click on the "Import from CSV" button and you will see the CSV converter. 
+
+Choose the file you want to convert to a trial file in JSON format by clicking on the "Parse CSV file" button. Notice that the selected file must be a CSV file (with `.csv` extension) and must follow a certain format, which will be discussed in details in the next section.
+
+<img src="/user-manual-images/csv.png" alt="CSV converter" width="60%" />
+
+If your CSV file is successfully parsed, you will see the parsed scenes and a section where you can input file name, repeated times, and whether or not to randomize the scenes. Click on "Generate trial file" and the trial file will be generated.
+
+<img src="/user-manual-images/csv_success.png" alt="CSV converter sucess" width="60%" />
+
+Otherwise, there are errors in your CSV file. Please follow the error messages to revise your CSV file.
+
+<img src="/user-manual-images/csv_error.png" alt="CSV converter error" width="60%" />
+
+##### How to generate CSV files
+
+If you are on Windows, you can export an Excel sheet to CSV file by clicking on `File` -> `Export to ...` -> Choose CSV format.
+
+If you are on Mac, you can export a Numbers sheet to CSV file by clicking on `File` -> `Export to ...` -> `CSV...`. A window will pop up and you can click on `Next...` to proceed. Don't change anything in `Advanced Options`.
+
+##### CSV trial file format
+
+If the generator's Object Form has not been modified (see section **Edit the forms**), you can use the sample CSV file `sample_trial_file.csv` as a template to build your CSV trial files.
+
+Otherwise, you must read this section, **Understanding JSON**, and **Edit the forms** carefully:
+
+The first row of the CSV file are column names. Each column corresponds to an entry in Scene Basic Information Form or Object Form. This column name must match the `label` of that entry's Form Entry Definition. Each of the following row represents a scene in the trial file. Note that you only need to define the unique scenes. You do not need to repeat or randomize them. 
+
+The first five entries (Scene name, Correct Answer, Play Sound, and Number of objects) are attributes of a scene. They are entries in the Scene Basic Information Form. Note that Scene Basic Information Form is uneditable, which means that the first five columns in `sample_trial_file.csv` should remain unchanged.
+
+The rest of the entires describe the Objects in that scene. We limit the maximum number of Objects in a scene to be 4 in order to keep the size of the CSV file reasonable; thus, the fields Object Form are sequentially repeated 4 times. Note that the number you entered in the “Number of Objects” entry must match the number of Objects you actually define. This means some rows will have empty entries at their tails.
+
+Depending on the Form Entry type (`type` field in its Form Entry Definition), you might need to reformat the entry value a little bit when you type it in to your Excel/Numbers sheet:
+-   Text: no change
+-   Number: no change
+-   Switch: `T` or `F`
+-   Select: use the key of an option, not the value (the display label)
+    -   E.g. For the following Form Entry Definition:
+        ```yaml
+        {
+            "key": "color",
+            "label": "Color",
+            "type": "select",
+            "options": {
+                "blue": "Blue",
+                "pink": "Pink"
+            }
+        }
+        ```
+        Your options are: `blue` and `pink`.
+-   List: separate your list items by `\` with no blank space in between
+    -   E.g. `1, 2, 3` becomes `1\2\3` and `red, blue, yellow` becomes `red\blue\yellow`.
+
+Note that if the `requried` field in the Form Entry Definition is set to `false` (default is `true`), then you can leave that entry empty. Otherwise you must enter a value.
+
+## Edit the forms
+
+This app allows users to add / delete Object types and edit two forms (Configuration File Form and Object Form) in advanced mode. 
+
+### Add / Delete Object types
+
+Navigate to the 'Form Settings' page by clicking on the 'Import form settings' button on the home page. You can add / delete the options of the Object Type entry in Object Form.
+
+<img src="/user-manual-images/form_settings_object_type.png" alt="Edit Object Types" width="60%" />
+
+### Advanced mode: import JSON format form settings
+
+This app allows users to edit two forms: Configuration File Form and Object Form. Forms can be configured with a JSON array containing form entry definitions. Each form entry definition configures an entry in the form.
+
+Warning: Modifying these forms means that the Unity VR program should be modified as well. Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output file look like? You should be able to write out the output JSON files by hand. 
+
+#### Understanding JSON
 
 JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. This file generator generate JSON files that configure VR experiments, and you can also customize the different forms with JSON files.
 
@@ -103,13 +189,7 @@ In JSON, values must be one of the following data types:
     }
     ```
 
-## Edit the forms
-
-This app allows users to edit two forms: configuration file form and object form. Forms can be configured with a JSON array containing form entry definitions. Each form entry definition configures an entry in the form.
-
-Note: Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output file look like? You should be able to write out the output JSON files by hand.
-
-### Form Entry Definition
+#### Form Entry Definition
 
 Form entry definitions are JSON objects. For each definition, three key-value pairs are required:
 
@@ -140,7 +220,7 @@ And if I type in `8`, the output file will look like this:
 { "subjNum": 8, ..., // other entries }
 ```
 
-### Types of Form Entry
+#### Types of Form Entry
 
 Five types of form entry are supported:
 
@@ -294,23 +374,23 @@ In the output:
 { "coordinatrs": [1, 2, 3], ... }
 ```
 
-### Import form setting
+#### Import form setting
 
-When you have a JSON file that conforms to the rules above, you can import this setting by navigating to the 'Form Settings' page by clicking on the 'Import form settings' button on the home page.
+When you have a JSON file that conforms to the rules above, you can import this setting by clicking on the 'Advanced...' button on the top right corner in the Form Settings page.
 
-<img src="/user-manual-images/import.png" alt="Import"  width="60%" />
+Now you can see the current form settings:
 
-The app will parse the imported file and report debugging errors, if there are any.
+<img src="/user-manual-images/form_settings_import.png" alt="Import"  width="60%" />
 
-<img src="/user-manual-images/import_error.png" alt="Import"  width="60%" />
+Click on the 'Import new settings' button to import a new setting for the form. The app will parse the imported file and report debugging errors, if there are any.
+
+<img src="/user-manual-images/form_settings_error.png" alt="Import"  width="60%" />
 
 If the imported file contains no error, you can click on the 'Save settings' button and save the settings.
 
-<img src="/user-manual-images/parse_successful.png" alt="Import" width="60%" />
+<img src="/user-manual-images/form_settings_sucess.png" alt="Import" width="60%" />
 
-The change will be reflected in the form:
-
-<img src="/user-manual-images/changed_form.png" alt="Import" width="60%" />
+The changes will be reflected in the form as well as the trial file CSV parser. For instance, if you added an entry in Object Form, the app expects each Object to have an additional column in the CSV file.
 
 ### Appendix: example
 

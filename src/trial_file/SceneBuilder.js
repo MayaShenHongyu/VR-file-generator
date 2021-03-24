@@ -139,6 +139,7 @@ export const SceneBuilder = () => {
                     maskClosable={false}
                     onCancel={onCloseModal}
                     footer={[]}
+                    width="90vw"
                 >
                     {renderObjectForm()}
                 </Modal>
@@ -172,9 +173,9 @@ export const SceneBuilder = () => {
                         <Link
                             key={"back"}
                             className="App-link"
-                            to="/generateTrialFileHome"
+                            to="/manualInput"
                         >
-                            Back to generate trial page
+                            Back to generate trial file with manual input page
                         </Link>,
                     ]}
                 />
