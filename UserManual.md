@@ -107,7 +107,7 @@ Otherwise, there are errors in your CSV file. Please follow the error messages t
 
 ##### How to generate CSV files
 
-If you are on Windows, you can export an Excel sheet to CSV file by clicking on `File` -> `Export to ...` -> Choose CSV format.
+If you are on Windows, you can export an Excel sheet to CSV file by clicking on `File` -> `Export to ...` -> Choose CSV format. Or you can directly edit a CSV file with Excel.
 
 If you are on Mac, you can export a Numbers sheet to CSV file by clicking on `File` -> `Export to ...` -> `CSV...`. A window will pop up and you can click on `Next...` to proceed. Don't change anything in `Advanced Options`.
 
