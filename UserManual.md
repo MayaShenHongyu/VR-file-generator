@@ -160,6 +160,24 @@ Navigate to the 'Form Settings' page by clicking on the 'Import form settings' b
 
 This app allows users to edit two forms: Configuration File Form and Object Form. Forms can be configured with a JSON array containing form entry definitions. Each form entry definition configures an entry in the form.
 
+*** Note that in order for the Object types editor (explained in the previous section) to work, the first Form Entry Definition of Object Form (see below) must remain unchanged:
+
+```yaml
+    {
+        "key": "objType",
+        "label": "Object Type",
+        "type": "select",
+        "defaultValue": "Car",
+        "options": {
+            "Car": "Car",
+            "Sphere": "Sphere",
+            "Cube": "Cube",
+            "Motorcycle": "Motorcycle"
+        },
+        "tooltip": "Choose which type of object to present to subjects."
+    }
+```
+
 Warning: Modifying these forms means that the Unity VR program should be modified as well. Before using this feature, you need to make sure you can describe the desired outcome: What should the form look like? What should the output file look like? You should be able to write out the output JSON files by hand. 
 
 #### Understanding JSON

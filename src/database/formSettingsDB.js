@@ -313,7 +313,6 @@ const populateDBDefault = () => {
                         display: true,
                         text: ".txt",
                     },
-                    defaultValue: "sound_file",
                     required: false,
                     tooltip:
                         "Enter the name of an existing file that defines the custom sounds that will be played to the subject during the trial. Note that you do not need to include the '.txt' suffix at the end of the file name.",
