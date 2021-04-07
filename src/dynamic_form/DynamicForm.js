@@ -55,7 +55,7 @@ export const DynamicForm = ({
             const { key, type } = entry;
             let processedVal = values[key];
             if (type === "text") {
-                if (processedVal === undefined) {
+                if (processedVal === undefined || processedVal === "") {
                     processedVal = "";
                 } else {
                     const { addonAfter, addonBefore } = entry;

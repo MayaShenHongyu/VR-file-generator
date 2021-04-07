@@ -13,17 +13,17 @@ There are two kinds of files you can generate: configuration file and trial file
 
 There are three forms to enable users to generate these files: configuration form, scene basic information form, and object form.
 
--   Configuration File Form: generate configuration file
+-   Configuration File Form: for generating configuration files; this form is customizable.
     <img src="/user-manual-images/configuration_file_builder.png" alt="Config builder" width="60%" />
 -   Scene Basic Information Form: set up basic information of a scene
     <img src="/user-manual-images/scene_builder_1.png" alt="Scene builder 1" width="60%" />
--   Object Form: specify the parameters of an object -- object type (e.g. car), velocity, start position, end position, etc.
+-   Object Form: for specifying the parameters of an object -- object type (e.g. car), velocity, start position, end position, etc; this form is customizable.
     -   A scene consists of multiple objects. The user will specify object number in scene basic information form, and the user will be asked to fill in one object form for each object.
         <img src="/user-manual-images/scene_builder_3.png" width="60%" alt="Object form"  />
 
 ### How this file generator differs from the previous file generator
 
--   This file generator allows users to edit the forms (described above) via a JSON file. This means that users can specify the format of the generated files. For instance, you could add a new option "pink" to the "feedbackColor" entry in the "config.JSON" file. In the previous file generator, these forms are hardcoded, which means that you have to change the code in order to change the forms.
+-   This file generator allows users to edit two of the forms described above (Configuration File Form and Object Form) via a JSON file. This means that users can specify the format of the generated files. For instance, you could add a new option "pink" to the "feedbackColor" entry in the "config.JSON" file. In the previous file generator, these forms are hardcoded, which means that you have to change the code in order to change the forms.
 -   For trial file generation, this file generator allows users to specify the repeated times for each selected scene, then randomize the scenes. In the previous file generator, you could randomize the selected scenes but they only appear one time.
 
 #### Potential drawbacks
@@ -182,9 +182,9 @@ Warning: Modifying these forms means that the Unity VR program should be modifie
 
 #### Understanding JSON
 
-JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. This file generator generate JSON files that configure VR experiments, and you can also customize the different forms with JSON files.
+JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. This file generator generate JSON files that configure VR experiments; **it is also the file format for customizing two forms: Configuration File Form and Object Form.**
 
-In JSON, values must be one of the following data types:
+In JSON, a value must be one of the following data types:
 
 -   a string: sequence of characters in double quotes
     -   e.g. `"this is a string"`
@@ -195,7 +195,7 @@ In JSON, values must be one of the following data types:
 -   an array: a list of JSON values in square brackets, separated by commas
     -   e.g. `["string value", 2.3, true, { "key": "value" }]`
 -   an object: a collection of key-value pairs in curly brackets, separated by commas
-    -   Keys must be strings. Note that an object cannot contain two identical keys.
+    -   Keys must be strings; an object cannot contain two identical keys.
     -   Values can be any JSON value: string, number, boolean, array, object
     -   e.g.
     ```yaml
@@ -209,13 +209,13 @@ In JSON, values must be one of the following data types:
 
 #### Form Entry Definition
 
-Form entry definitions are JSON objects. For each definition, three key-value pairs are required:
+A Form Entry Definition describes an entry in a form. Form entry definitions are JSON objects. For each definition, three key-value pairs are required:
 
 -   `"label"`: This is the label for this entry at display. The value must be a string. Note that this does not affect the output of this entry in the resulting JSON file.
 -   `"key"`: This is the key for this entry in the resulting JSON file. The value must be a string. Note that all Form Entry Definiton keys in a form setting must be unique.
 -   `"type"`: This refers to the input type of this entry. This file generator supports five different types: `"text"`, `"number"`, `"switch"` (true or false), `"selection"` (a dropdown menu), `"list"` (a list of texts or numbers).
 -   (Optional) `"tooltip"`: Documentation for this entry. The value must be a string.
--   Depending on the input type, different key-value pairs are required, which is discussed in detials below. \*(Optional) means that the key-value pair is optional.
+-   Depending on the input type, different additional key-value pairs are required, which is discussed in detials below. \*(Optional) means that the key-value pair is optional -- you don't have to include the pair in your Form Entry Definition for it to work.
 
 For example:
 
@@ -287,6 +287,7 @@ In the output:
 -   (Optional) `"defaultValue"`: Default value for this entry. This must be a number.
 -   (Optional) `"max"`: Maximum value for this entry. Must be a number.
 -   (Optional) `"min"`: Minimum value for this entry. Must be a number.
+-   (Optional) `"step"`: Increment size when you click on the up or down error.
 
 For example:
 
@@ -298,6 +299,7 @@ For example:
     "defaultValue": 8,
     "max": 10,
     "min": 1,
+    "step": 0.1
 }
 ```
 
@@ -370,6 +372,7 @@ In the output:
 -   `"itemType"`: The type of elements in list. Either `"number"` or `"text"`.
 -   `"listSize"`: The number of elements in list. Should be smaller than 5.
 -   (Optional) `"defaultValue"`: Default value for this entry. This must be a list containing `"listSize"` elements of type `"itemType"`. If `"listSize"` is `2` and `"itemType"` is `"text"`, then `"defaultValue"` could be `["value1", "value2"]`.
+-   (Optional - only valid when`itemType` is `number`): `"step"`: Increment size when you click on the up or down error of the number input.
 
 For example:
 
@@ -380,6 +383,7 @@ For example:
     "type": "list",
     "itemType": "number",
     "listSize": 3,
+    "step": 0.1,
     "defaultValue": [1, 2, 3],
 }
 ```

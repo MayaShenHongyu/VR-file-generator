@@ -1,5 +1,9 @@
 # Configurable VR File Generator Developer Manual
 
+This is the developer manual for project: https://github.com/Rice-Perception-and-Action-Lab/MayaShen-configurable-VR-file-generator
+
+If you're looking for the user manual: https://github.com/Rice-Perception-and-Action-Lab/MayaShen-configurable-VR-file-generator/blob/master/UserManual.md
+
 ### Purpose
 
 This file generator generates input files for the VR experiment (WinObjVR) based on user specification. It also allows users to configure the format of the generated files. For instance, you could add a new option "pink" to the "feedbackColor" entry in the "config.JSON" file.
@@ -33,7 +37,7 @@ There are two kinds of files you can generate: configuration file and trial file
 -   This project uses JavaScript and CSS.
 -   This project uses Electron, a framework for building desktop applications. See docs: https://www.electronjs.org/docs
 -   This project uses React, a framework usually for web applications. It is used here because it is good for building UI components. See docs: https://reactjs.org/docs/getting-started.html
--   This project uses Ant Design, a UI component library. This is mostly for aesthetic purpose. See docs: https://ant.design/components/
+-   This project uses Ant Design, a UI component library. This is mostly for aesthetic purpose. See docs: https://ant.design/components/overview/
 
 ### Files and programs needed
 

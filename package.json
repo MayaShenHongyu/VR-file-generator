@@ -8,7 +8,10 @@
     "build": {
         "appId": "com.electron.vr-file-generator",
         "productName": "VR File Generator",
-        "copyright": "Copyright © year ${author}"
+        "copyright": "Copyright © year ${author}",
+        "nsis": {
+            "createDesktopShortcut": "always"
+        }
     },
     "homepage": "./",
     "dependencies": {

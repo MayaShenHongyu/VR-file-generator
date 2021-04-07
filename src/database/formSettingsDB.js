@@ -286,7 +286,6 @@ const populateDBDefault = () => {
                     key: "sceneName",
                     label: "Scene Name",
                     type: "text",
-                    defaultValue: "name",
                 },
                 {
                     key: "corrAns",
