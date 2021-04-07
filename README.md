@@ -62,7 +62,7 @@ Run the app in the development mode. The page will reload if you make edits. You
 
 Build the app for production (output executables) to the `dist` folder.<br />
 
-### `npx prettier --write .`
+#### `npx prettier --write .`
 
 Format all files with Prettier. Prettier is a code formatting tool. See docs: https://prettier.io/docs/en/install.html
 
@@ -98,7 +98,7 @@ Format all files with Prettier. Prettier is a code formatting tool. See docs: ht
     -   Directory `database` contains APIs to manage the database.
         -   `formSettingsDB.js` contains functions to manage the form setting database `form_config.db`.
         -   `scenesDB.js` contains functions to manage the scene database `scenes.db`.
-        -   When the application runs for the first time, `form_config.db` and `scenes.db` are set up in a `db` directory the user's app data folder:
+        -   When the application runs for the first time, `form_config.db` and `scenes.db` are set up in a directory named `db` in user's app data folder:
             -   For Windows, this app data folder is usually at `C:\Users\<you>\AppData\Local\configurable-vr-file-generator`.
             -   For Mac, this is usually `~/Library/Application Support/configurable-vr-file-generator`.
     
