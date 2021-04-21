@@ -3,7 +3,7 @@
 This is the developer manual for project: https://github.com/Rice-Perception-and-Action-Lab/MayaShen-configurable-VR-file-generator
 
 If you're looking for the user manual: https://github.com/Rice-Perception-and-Action-Lab/MayaShen-configurable-VR-file-generator/blob/master/UserManual.md
-
+
 ### Purpose
 
 This file generator generates input files for the VR experiment (WinObjVR) based on user specification. It also allows users to configure the format of the generated files. For instance, you could add a new option "pink" to the "feedbackColor" entry in the "config.JSON" file.
@@ -42,17 +42,19 @@ There are two kinds of files you can generate: configuration file and trial file
 ### Files and programs needed
 
 -   Git - Follow the instructions here to install: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git.
--   Your favorite IDE - The author used Visual Sudio Code (https://code.visualstudio.com/download), but you could use any IDE you like.
+-   NPM (package manager for JavaScript language) - Follow the instructons here to install: https://www.npmjs.com/get-npm. To confirm that you have successfully installed, open a terminal and run command `npm -v`. You should see a virsion number printed.
+-   Your favorite IDE (Integrated development environment, or code editor) - The author used Visual Sudio Code (https://code.visualstudio.com/download), but you could use any IDE you like.
 
 ### Set up
 
-1. In terminal, go to the directory in which you would like to keep this project. Clone the project to local with `git clone https://github.com/Rice-Perception-and-Action-Lab/MayaShen-configurable-VR-file-generator.git`. Then you will see a new folder with the name of this project. You have successfully cloned this project to local.
-2. Go to the directory you just pulled from git, run `npm install` to install the dependencies.
-3. Use your IDE to open this project. You can start coding now.
+1. After you have installed Git and NPM, open a new terminal and go to the directory in which you would like to keep this project with. Use command `cd [directory name]` to change your working directory. For instance, if you want to keep this project on your desktop, you should run `cd Desktop`. 
+2. Clone the project to local with this command: `git clone https://github.com/Rice-Perception-and-Action-Lab/MayaShen-configurable-VR-file-generator.git`. You will see a new folder with the name of this project on your desktop, for instance. You have successfully cloned this project to local.
+3. Go to the directory you just pulled from git with command `cd MayaShen-configurable-VR-file-generator` and run `npm install` to install the dependencies.
+4. Use your IDE to open this project. For Visual Studio Code, you should do `Open Folder -> Select MayaShen-configurable-VR-file-generator folder`.  You can start coding now.
 
 ### Available Scripts
 
-In the project directory, you can run the followings in terminal:
+In the project directory (folder MayaShen-configurable-VR-file-generator) in terminal, you can run the followings:
 
 #### `npm run start`
 

@@ -77,13 +77,19 @@ const parseEntry = (rowIndex, colIndex, stringVal, entryDef, errorMessages) => {
 
         case "list": {
             const { listSize, itemType } = entryDef;
-            const splittedStrings = stringVal.split("\\");
+            if (stringVal[0] !== "\"" || stringVal[stringVal.length - 1] !== "\"") {
+                errorMessages.push(
+                    `${errorHeader}: entry "${stringVal}" (${label}) should be in quotation marks.`
+                );
+                return undefined;
+            }
+            const splittedStrings = stringVal.slice(1, -1).split(",").map(str => str.trim());
             if (
                 listSize !== splittedStrings.length ||
                 splittedStrings.includes("")
             ) {
                 errorMessages.push(
-                    `${errorHeader}: entry "${stringVal}" (${label}) should be a list of size ${listSize}.`
+                    `${errorHeader}: entry "${stringVal}" (${label}) should be a list of size ${listSize}, splitted by commas.`
                 );
                 return undefined;
             }

@@ -83,7 +83,7 @@ Then you will see a page where you can define each Object.
 After clicking on one, you can see the Object Form where you define the attributed of an object.
 <img src="/user-manual-images/scene_builder_3.png" alt="Scene builder 3" width="60%" />
 
-After finishing creating scenes, you will be send back to the Manal Input home page. Click on the "Generate trial" button, then you will see all scenes avaliable in the database.
+After finishing creating scenes, you will be send back to the Manal Input home page. Click on the "Generate trial" button, then you will see all scenes avaliable in the database. Click on the available scenes for them to be selected.
 
 <img src="/user-manual-images/trial_builder.png" alt="Trial builder" width="60%" />
 
@@ -91,7 +91,7 @@ Note that you need to input the file name, repeated times, and whether or not to
 
 #### Import from CSV
 
-Click on the "Import from CSV" button and you will see the CSV converter. 
+Home page -> "Generate trial file" -> "Import from CSV", then you will see the CSV converter. 
 
 Choose the file you want to convert to a trial file in JSON format by clicking on the "Parse CSV file" button. Notice that the selected file must be a CSV file (with `.csv` extension) and must follow a certain format, which will be discussed in details in the next section.
 
@@ -141,8 +141,8 @@ Depending on the Form Entry type (`type` field in its Form Entry Definition), yo
         }
         ```
         Your options are: `blue` and `pink`.
--   List: separate your list items by `\` with no blank space in between
-    -   E.g. `1, 2, 3` becomes `1\2\3` and `red, blue, yellow` becomes `red\blue\yellow`.
+-   List: separate your list items by `,` with no blank space in between and put `"` around the items.
+    -   E.g. `1, 2, 3` becomes `"1,2,3"` and `red, blue, yellow` becomes `"red,blue,yellow"`.
 
 Note that if the `requried` field in the Form Entry Definition is set to `false` (default is `true`), then you can leave that entry empty. Otherwise you must enter a value.
 
